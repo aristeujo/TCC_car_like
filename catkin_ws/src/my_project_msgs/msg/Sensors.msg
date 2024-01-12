@@ -1,0 +1,3 @@
+float64 encoder_eixo
+float64 encoder_as5600_R
+float64 encoder_as5600_L
