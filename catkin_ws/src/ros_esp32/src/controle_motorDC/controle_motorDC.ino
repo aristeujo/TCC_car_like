@@ -6,7 +6,7 @@
 #include "AS5600.h"
 #include "encoder.h"
 
-void roda_contador();
+void ISR_contador();
 
 #define FORWARD 1
 #define BACKWARD 0
@@ -14,6 +14,7 @@ void roda_contador();
 
 #define ENC_IN_A 12 // Fio verde
 #define ENC_IN_B 13 // Fio Amarelo
+#define potPin  34
 
 Motor motor(19,18,4,22);
 Encoder encoder;
@@ -26,18 +27,11 @@ Controller Controller({-4.8697, -2.4895}, {2.49});
 //Controller Controller({-4.8697, -2.4895}, {0});
 
 Matrix<2, 1> states = {0, 0};
-
+Matrix<1> y;
 float u = 0;
 
-long previousMillis = 0;
 unsigned long timer = 0;
 unsigned long intervalo = 100;
-
-int angulo_frente = 98;
-
-const int potPin = 34;
-
-Matrix<1> y;
 
 void setup() {
 
@@ -49,12 +43,12 @@ void setup() {
   pinMode(ENC_IN_A , INPUT_PULLUP);
   pinMode(ENC_IN_B , INPUT);
   
-  attachInterrupt(digitalPinToInterrupt(ENC_IN_A), roda_contador, RISING);
+  attachInterrupt(digitalPinToInterrupt(ENC_IN_A), ISR_contador, RISING);
 
   encoder.setEncoder_AS5600(as5600_0, 23); 
   
   motor.motorSpeed(0, STOP);
-  motor.setAngle(angulo_frente);
+  motor.setAngle(motor.angulo_frente);
   Serial.println("End of Setup");
 
   delay(2000);
@@ -80,7 +74,7 @@ void loop() {
   }
 }
 
-void roda_contador(){
+void ISR_contador(){
   int val = digitalRead(ENC_IN_B);
 
   if (val == LOW) {

@@ -23,7 +23,8 @@ public:
     void initMotor();
     void motorSpeed(int velocidade, int sentido);
     void setAngle(int angle);
-    
+
+    int angulo_frente = 98;
 };
 
 #endif
