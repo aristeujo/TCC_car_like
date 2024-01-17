@@ -6,22 +6,6 @@
 
 #IncludeRegexTransform: 
 
-/home/aristeujo/Documentos/TCC_codes/catkin_ws/devel/include/my_project_msgs/Sensors.h
-string
--
-vector
--
-memory
--
-ros/types.h
--
-ros/serialization.h
--
-ros/builtin_message_traits.h
--
-ros/message_operations.h
--
-
 /home/aristeujo/Documentos/TCC_codes/catkin_ws/src/ros_esp32/src/sensors_node.cpp
 ros/ros.h
 /home/aristeujo/Documentos/TCC_codes/catkin_ws/src/ros_esp32/src/ros/ros.h
@@ -236,10 +220,6 @@ boost/make_shared.hpp
 cstddef
 -
 memory
--
-
-/opt/ros/noetic/include/ros/message_operations.h
-ostream
 -
 
 /opt/ros/noetic/include/ros/message_traits.h
