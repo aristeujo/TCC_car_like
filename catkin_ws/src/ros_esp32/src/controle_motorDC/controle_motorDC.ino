@@ -5,15 +5,15 @@
 #include "kalmanFilter.h"
 #include "motor.h"
 #include "AS5600.h"
-#include "encoder.h"
 #include "WiFi.h"
+#include "encoder.h"
 #include <ros.h>
-#include <geometry_msgs/Twist.h>
+#include <ackermann_msgs/AckermannDriveStamped.h>
 #include <my_project_msgs/Sensors.h>
 
 void ISR_contador();
 void setupWiFi();
-void cmdVel_to_pwm_cb( const geometry_msgs::Twist &velocity_msg);
+void cmdVel_to_pwm( const ackermann_msgs::AckermannDriveStamped &velocity_msg);
 
 #define FORWARD 1
 #define BACKWARD 0
@@ -30,14 +30,21 @@ const char*  password = "Mayum647";
 
 ros::NodeHandle  nh;
 my_project_msgs::Sensors msg;
-ros::Publisher chatter("/sensors_values", &msg);
-ros::Subscriber<geometry_msgs::Twist> sub("/cmd_vel", &cmdVel_to_pwm_cb );
 
-Motor motor(19,18,4,22);
+ros::Publisher chatter("/sensors_values", &msg);
+ros::Subscriber<ackermann_msgs::AckermannDriveStamped> sub("/ackermann_cmd", &cmdVel_to_pwm );
+
+Motor motor(19,18,4,27);
 Encoder encoder;
 
-AS5600 as5600_0(&Wire);
-AS5600 as5600_1(&Wire1);
+float pwm = 0.0;
+float angle = 0.0;
+
+TwoWire Wire_0 = TwoWire(0);
+TwoWire Wire_1 = TwoWire(1);
+
+AS5600 as5600_0(&Wire_0);
+AS5600 as5600_1(&Wire_1);
 
 KalmanFilter motorFilter(sysX.A, sysX.B, sysX.C, 3.5e-2, 1e-3);
 Controller Controller({-4.8697, -2.4895}, {2.49});
@@ -51,7 +58,6 @@ unsigned long timer = 0;
 unsigned long intervalo = 100;
 
 void setup() {
-
   Serial.begin(115200);
   pinMode(2, OUTPUT);
   setupWiFi();
@@ -60,7 +66,6 @@ void setup() {
   nh.advertise(chatter);
   nh.subscribe(sub);
   
-  Wire.begin();
   motor.initMotor();
 
   pinMode(potPin, INPUT);  
@@ -69,7 +74,8 @@ void setup() {
   
   attachInterrupt(digitalPinToInterrupt(ENC_IN_A), ISR_contador, RISING);
 
-  encoder.setEncoder_AS5600(as5600_0, 23); 
+  encoder.setEncoder_AS5600(as5600_0, 5,23,15, Wire_0); 
+  encoder.setEncoder_AS5600(as5600_1, 32,33,26, Wire_1); 
   
   motor.motorSpeed(0, STOP);
   motor.setAngle(motor.angulo_frente);
@@ -79,31 +85,30 @@ void setup() {
 }
 
 void loop() {
-  int val = map(analogRead(potPin), 0, 4095, 0, 255);
+  // int val = map(analogRead(potPin), 0, 4095, 0, 255);
   //  Controller.r(0) = val;
 
   if (millis() - timer >= intervalo) {
-    float enc_as5600 = encoder.getRPM_AS5600(as5600_0);
-    float rpm = encoder.getRPM_MotorEixo(intervalo);
+     float enc_as5600_L = encoder.getRPM_AS5600(as5600_0);
+     float enc_as5600_R = encoder.getRPM_AS5600(as5600_1);
+     float rpm = encoder.getRPM_MotorEixo(intervalo);
     // y(0) = rpm;
     
     // states = motorFilter.kalman(u, rpm);
     // u = Controller.controlLaw(states, y); 
     // saturate(&u,0,255);  
-    motor.motorSpeed(val, FORWARD);
+    // motor.motorSpeed(val, FORWARD);
     // Serial.printf("RPM:%.2f\n", encoder.rpm);
-    Serial.printf("RPM:%.2f  AS5600: %.2f\n", rpm, enc_as5600);
+//     Serial.printf("RPM:%.2f  AS5600_L: %.2f  AS5600_R: %.2f\n", rpm, enc_as5600_L, enc_as5600_R);
     // Serial.printf("r:%.2f  x_hat:%.2f y: %.2f\n", Controller.r(0), states(0), rpm);
     
     msg.encoder_eixo = rpm;
-    msg.encoder_as5600_L = enc_as5600;
-    msg.encoder_as5600_R = 110;   
+    msg.encoder_as5600_L = enc_as5600_L;
+    msg.encoder_as5600_R = enc_as5600_R;   
     chatter.publish(&msg);
     nh.spinOnce();
-
     timer = millis();
   }
-
 }
 
 void ISR_contador(){
@@ -135,11 +140,21 @@ void setupWiFi(){
 
 }
 
-void cmdVel_to_pwm_cb( const geometry_msgs::Twist &velocity_msg){
+void cmdVel_to_pwm(const ackermann_msgs::AckermannDriveStamped &velocity_msg){
 
-    float right_wheel = (velocity_msg.linear.x + velocity_msg.angular.z ) / 2 ;
-    float left_wheel = (velocity_msg.linear.x - velocity_msg.angular.z ) /2 ;
+    float motor_speed = velocity_msg.drive.speed;
+    float steering_angle = velocity_msg.drive.steering_angle;
 
-    Serial.print(left_wheel);Serial.print(" / ");Serial.println(right_wheel);
+    pwm = 325*abs(motor_speed) + 190;
+    angle = 93*steering_angle + 100;
+    angle = constrain(angle, 50, 150);
+
+    if(motor_speed > 0){ motor.motorSpeed(pwm, FORWARD);}
+    else if(motor_speed < 0){ motor.motorSpeed(pwm, BACKWARD);}
+    else if(motor_speed == 0){motor.motorSpeed(0, STOP);}
+
+    motor.setAngle(angle);
+
+    Serial.print(pwm);Serial.print(" / ");Serial.println(angle);
 
 }
