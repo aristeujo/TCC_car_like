@@ -7,7 +7,7 @@ Giroscopio::Giroscopio(){}
 Giroscopio::~Giroscopio(){}
 
 void Giroscopio::setup_giro(){
-  Wire.begin();
+  // Wire.begin();
   
   byte status = mpu.begin();
   Serial.print(F("MPU6050 status: "));
@@ -21,20 +21,15 @@ void Giroscopio::setup_giro(){
   Serial.println("Done!\n");
 };
 
-void Giroscopio::get_data_mpu(){
+void Giroscopio::update_mpu(){
   mpu.update();
-  
-  if((millis()-this->timer)>this->taxaDeAmostragem){ 
-    this->accX = gToMpss(mpu.getAccX());
-    this->angularVelocityZ = radians(mpu.getGyroZ());
-    this->angleZ = mpu.getAngleZ();
-
-    this->velocidade_X = estima_velocidade_X(accX);
-    
-    this->t += this->taxaDeAmostragem;
-    timer = millis();  
-  }
 };
+
+void Giroscopio::get_data(){
+//   this->accX = gToMpss(mpu.getAccX());
+  this->angularVelocityZ = radians(mpu.getGyroZ());
+//   this->angleZ = mpu.getAngleZ();
+}
 
 void Giroscopio::debug_data(){
     Serial.print(t/1000);

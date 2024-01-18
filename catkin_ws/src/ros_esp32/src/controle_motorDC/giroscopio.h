@@ -1,7 +1,6 @@
 #ifndef GIROSCOPIO_H_
 #define GIROSCOPIO_H_
 
-#include "Wire.h"
 #include <MPU6050_light.h>
 #include <math.h>
 
@@ -29,7 +28,8 @@ public:
     float angleZ = 0;
 
     void setup_giro();
-    void get_data_mpu();
+    void update_mpu();
+    void get_data();
     void debug_data();
     float estima_velocidade_X(float aceleracao);
     float gToMpss(float acc);
