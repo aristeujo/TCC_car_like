@@ -1,4 +1,4 @@
 {
-    "cmake.sourceDirectory": "/home/aristeujo/Documentos/TCC_codes/catkin_ws/src/ros_esp32",
+    "cmake.sourceDirectory": "/home/aristeujo/TCC/catkin_ws/src/ros_esp32",
     "cmake.configureOnOpen": true
 }

@@ -16,7 +16,7 @@ public:
     Encoder(/* args */);
     ~Encoder(); 
 
-    void setEncoder_AS5600(AS5600 &obj, int SCL_pin, int SDA_pin, int direction_pin, TwoWire &I2C_obj);
+    void setEncoder_AS5600(AS5600 &obj, int SDA_pin, int SCL_pin, int direction_pin, TwoWire &I2C_obj);
     float getRPM_AS5600(AS5600 &obj);
     float getRPM_MotorEixo(unsigned long intervalo);
 
