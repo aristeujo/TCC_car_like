@@ -6,11 +6,11 @@
 
 #IncludeRegexTransform: 
 
-/home/aristeujo/Documentos/TCC_codes/catkin_ws/src/ros_esp32/src/sensors_node.cpp
+/home/aristeujo/TCC/catkin_ws/src/ros_esp32/src/sensors_node.cpp
 ros/ros.h
-/home/aristeujo/Documentos/TCC_codes/catkin_ws/src/ros_esp32/src/ros/ros.h
+/home/aristeujo/TCC/catkin_ws/src/ros_esp32/src/ros/ros.h
 my_project_msgs/Sensors.h
-/home/aristeujo/Documentos/TCC_codes/catkin_ws/src/ros_esp32/src/my_project_msgs/Sensors.h
+/home/aristeujo/TCC/catkin_ws/src/ros_esp32/src/my_project_msgs/Sensors.h
 
 /opt/ros/noetic/include/ros/advertise_options.h
 ros/forwards.h

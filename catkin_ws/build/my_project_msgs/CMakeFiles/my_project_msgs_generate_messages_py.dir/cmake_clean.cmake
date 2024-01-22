@@ -1,6 +1,6 @@
 file(REMOVE_RECURSE
-  "/home/aristeujo/Documentos/TCC_codes/catkin_ws/devel/lib/python3/dist-packages/my_project_msgs/msg/_Sensors.py"
-  "/home/aristeujo/Documentos/TCC_codes/catkin_ws/devel/lib/python3/dist-packages/my_project_msgs/msg/__init__.py"
+  "/home/aristeujo/TCC/catkin_ws/devel/lib/python3/dist-packages/my_project_msgs/msg/_Sensors.py"
+  "/home/aristeujo/TCC/catkin_ws/devel/lib/python3/dist-packages/my_project_msgs/msg/__init__.py"
   "CMakeFiles/my_project_msgs_generate_messages_py"
 )
 
