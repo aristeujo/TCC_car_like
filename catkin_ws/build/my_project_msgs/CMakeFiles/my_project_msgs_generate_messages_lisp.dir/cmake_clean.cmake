@@ -1,5 +1,5 @@
 file(REMOVE_RECURSE
-  "/home/aristeujo/TCC/catkin_ws/devel/share/common-lisp/ros/my_project_msgs/msg/Sensors.lisp"
+  "/home/aristeujo/Documentos/TCC_codes/catkin_ws/devel/share/common-lisp/ros/my_project_msgs/msg/Sensors.lisp"
   "CMakeFiles/my_project_msgs_generate_messages_lisp"
 )
 

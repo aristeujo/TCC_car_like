@@ -9,8 +9,8 @@
 #include "AS5600.h"
 #include "giroscopio.h"
 #include <ros.h>
- #include <ackermann_msgs/AckermannDriveStamped.h>
- #include <my_project_msgs/Sensors.h>
+#include <ackermann_msgs/AckermannDriveStamped.h>
+#include <my_project_msgs/Sensors.h>
 
 void ISR_contador();
 void setupWiFi();
@@ -24,16 +24,16 @@ void setupWiFi();
 #define ENC_IN_B 13 // Fio Amarelo
 #define potPin  34
 
-// IPAddress server(192, 168, 0, 30); //IP do desktop da minha casa
-
-IPAddress server(192,169,141,72); //IP do notebook do STEM
+ IPAddress server(192, 168, 0, 30); //IP do desktop da minha casa
+//
+//IPAddress server(192,169,141,72); //IP do notebook do STEM
 
 uint16_t serverPort = 11411;
-// const char*  ssid = "Seixas_Net";
-// const char*  password = "Mayum647";
+ const char*  ssid = "Seixas_Net";
+ const char*  password = "Mayum647";
 
-const char*  ssid = "STEM_ALUNOS";
-const char*  password = "1n0v@.st3m!!";
+//const char*  ssid = "STEM_ALUNOS";
+//const char*  password = "1n0v@.st3m!!";
 
 
  ros::NodeHandle  nh;
@@ -42,7 +42,7 @@ const char*  password = "1n0v@.st3m!!";
  ros::Publisher chatter("/sensors_values", &msg);
  ros::Subscriber<ackermann_msgs::AckermannDriveStamped> sub("/ackermann_cmd", &cmdVel_to_pwm );
 
-Motor motor(19,18,4,27);
+Motor motor(18,19,4,27);
 Encoder encoder;
 
 float pwm = 0.0;
@@ -72,7 +72,7 @@ void setup() {
   pinMode(2, OUTPUT);
   setupWiFi();
 
-  delay(1500);
+//  delay(1500);
    nh.getHardware()->setConnection(server, serverPort);
    nh.initNode();
    nh.advertise(chatter);
@@ -85,16 +85,15 @@ void setup() {
   pinMode(ENC_IN_B , INPUT);
   
   // attachInterrupt(digitalPinToInterrupt(ENC_IN_A), ISR_contador, RISING);
-//  Wire.begin(21,22);
-//  as5600_0.begin(5);
-//  as5600_0.setDirection(AS5600_COUNTERCLOCK_WISE);
-//  int a = as5600_0.isConnected();
-//  Serial.print("Connect: ");
-//  Serial.println(a);
-  // encoder.setEncoder_AS5600(as5600_0, 22,21,5, Wire); 
-//  encoder.setEncoder_AS5600(as5600_1, 33,32,26, Wire_1); 
+  Wire.begin(21,22);
+  as5600_0.begin(5);
+  as5600_0.setDirection(AS5600_CLOCK_WISE);
+  int a = as5600_0.isConnected();
+  Serial.print("Connect: ");
+  Serial.println(a);
+  encoder.setEncoder_AS5600(as5600_1, 32,33,25, Wire_1); 
 
-//  mpu6050.setup_giro();
+  mpu6050.setup_giro();
   
   motor.motorSpeed(0, STOP);
   motor.setAngle(motor.angulo_frente);
@@ -106,25 +105,25 @@ void setup() {
 void loop() {
   // int val = map(analogRead(potPin), 0, 4095, 0, 255);
   //  Controller.r(0) = val;
-//  mpu6050.update_mpu();
+  mpu6050.update_mpu();
 
   if (millis() - timer >= intervalo) {
-//    mpu6050.get_data();
+    mpu6050.get_data();
   
-//    float enc_as5600_L = encoder.getRPM_AS5600(as5600_0);
-//    float enc_as5600_R = encoder.getRPM_AS5600(as5600_1);
-    float enc_as5600_L = 100;
-    float enc_as5600_R = 180;
+    float enc_as5600_L = encoder.getRPM_AS5600(as5600_0);
+    float enc_as5600_R = encoder.getRPM_AS5600(as5600_1);
+//    float enc_as5600_L = 100;
+//    float enc_as5600_R = 180;
     // float rpm = encoder.getRPM_MotorEixo(intervalo);
     float rpm = 80;
     
     // y(0) = rpm;
-    
+
     // states = motorFilter.kalman(u, rpm);
     // u = Controller.controlLaw(states, y); 
     // saturate(&u,0,255);  
     
-    // Serial.printf("RPM:%.2f\n", encoder.rpm);
+    // Serial.printf("RPM:%.2f\n", encoder.rpm);.
 //    Serial.printf("RPM:%.2f  AS5600_L: %.2f  AS5600_R: %.2f  Z_angle: %.2f\n", rpm, enc_as5600_L, enc_as5600_R, mpu6050.angularVelocityZ);
     // Serial.printf("r:%.2f  x_hat:%.2f y: %.2f\n", Controller.r(0), states(0), rpm);
     
@@ -135,8 +134,9 @@ void loop() {
      nh.spinOnce();
     timer = millis();
   }
-//  motor.motorSpeed(190, FORWARD);
-//  motor.setAngle(80);
+  
+//  motor.motorSpeed(150, BACKWARD); // Min = 150 || Max = 230
+//  motor.setAngle(130);
 }
 
 // void ISR_contador(){
@@ -173,8 +173,8 @@ void setupWiFi(){
      float motor_speed = velocity_msg.drive.speed;
      float steering_angle = velocity_msg.drive.steering_angle;
 
-     pwm = 325*abs(motor_speed) + 190;
-     angle = 93*steering_angle + 100;
+     pwm = 450*abs(motor_speed) + 140;
+     angle = 100 -  93*steering_angle ;
      angle = constrain(angle, 50, 150);
 
      if(motor_speed > 0){ motor.motorSpeed(pwm, FORWARD);}
@@ -183,6 +183,6 @@ void setupWiFi(){
 
      motor.setAngle(angle);
 
-     Serial.print(pwm);Serial.print(" / ");Serial.println(angle);
+//     Serial.print(pwm);Serial.print(" / ");Serial.println(angle);
 
  }
