@@ -24,16 +24,16 @@ void setupWiFi();
 #define ENC_IN_B 13 // Fio Amarelo
 #define potPin  34
 
- IPAddress server(192, 168, 0, 30); //IP do/ desktop da minha casa
-//
-//IPAddress server(192,169,141,72); //IP do /notebook do STEM
+// IPAddress server(192, 168, 0, 30); //IP do/ desktop da minha casa
+
+IPAddress server(192,169,141,72); //IP do /notebook do STEM
 
 uint16_t serverPort = 11411;
- const char*  ssid = "Seixas_Net";
- const char*  password = "Mayum647";//
+// const char*  ssid = "Seixas_Net";
+// const char*  password = "Mayum647";//
 
-//const char*  ssid = "STEM_ALUNOS";/
-//const char*  password = "1n0v@.st3m!!";/
+const char*  ssid = "STEM_ALUNOS";
+const char*  password = "1n0v@.st3m!!";
 
 
  ros::NodeHandle  nh;
@@ -63,6 +63,7 @@ Controller Controller({-4.8697, -2.4895}, {2.49});
 Matrix<2, 1> states = {0, 0};
 Matrix<1> y;
 float u = 0;
+float r = 0;
 
 unsigned long timer = 0;
 unsigned long intervalo = 100;
@@ -83,7 +84,7 @@ void setup() {
   pinMode(ENC_IN_A , INPUT_PULLUP);
   pinMode(ENC_IN_B , INPUT);
   
-   attachInterrupt(digitalPinToInterrupt(ENC_IN_A), ISR_contador, RISING);
+  attachInterrupt(digitalPinToInterrupt(ENC_IN_A), ISR_contador, RISING);
   Wire.begin(21,22);
   as5600_0.begin(5);
   as5600_0.setDirection(AS5600_CLOCK_WISE);
@@ -102,18 +103,24 @@ void setup() {
 }
 
 void loop() {
-   int r = map(analogRead(potPin), 0, 4095, 0, 280);
+//   int r = map(analogRead(potPin), 0, 4095, 0, 280);
 //    Controller.r(0) = val;
-//  mpu6050.update_mpu();
+//int r = 220;
+  mpu6050.update_mpu();
+    //  set initial position
+//  as5600_0.getCumulativePosition();
 
   if (millis() - timer >= intervalo) {
-//    mpu6050.get_data();
+    mpu6050.get_data();
   
-//    float enc_as5600_L = encoder.getRPM_AS5600(as5600_0);
-//    float enc_as5600_R = encoder.getRPM_AS5600(as5600_1);
+    float enc_as5600_L = encoder.getRPM_AS5600(as5600_0);
+    float enc_as5600_R = encoder.getRPM_AS5600(as5600_1);
 //    float enc_as5600_L = 100;
 //    float enc_as5600_R = 180;
      float rpm = encoder.getRPM_MotorEixo(intervalo);
+//     Serial.print(as5600_0.getCumulativePosition());
+//      Serial.print("\t");
+//      Serial.println(as5600_0.getRevolutions());
 //    float rpm = 80;
     
 //     y(0) = rpm;
@@ -127,12 +134,12 @@ void loop() {
      Serial.printf("r:%d RPM:%.2f u:%.2f\n",r, rpm, u);
 //    Serial.printf("RPM:%.2f  AS5600_L: %.2f  AS5600_R: %.2f  Z_angle: %.2f\n", rpm, enc_as5600_L, enc_as5600_R, mpu6050.angularVelocityZ);
 //     Serial.printf("r:%.2f  x_hat:%.2f y: %.2f\n", Controller.r(0), states(0), rpm);
-    motor.motorSpeed(u, FORWARD); // Min = 150 || Max = 230
-//     msg.encoder_eixo = rpm;
-//     msg.encoder_as5600_L = enc_as5600_L;
-//     msg.encoder_as5600_R = enc_as5600_R;   
-//     chatter.publish(&msg);
-//     nh.spinOnce();
+//    motor.motorSpeed(u, FORWARD); // Min = 150 || Max = 230
+     msg.encoder_eixo = rpm;
+     msg.encoder_as5600_L = enc_as5600_L;
+     msg.encoder_as5600_R = enc_as5600_R;   
+     chatter.publish(&msg);
+     nh.spinOnce();
     timer = millis();
   }
   
@@ -175,11 +182,13 @@ void setupWiFi(){
      float steering_angle = velocity_msg.drive.steering_angle;
 
      pwm = 450*abs(motor_speed) + 140;
+     r = pwm;
+     
      angle = 100 -  93*steering_angle ;
      angle = constrain(angle, 50, 150);
 
-     if(motor_speed > 0){ motor.motorSpeed(pwm, FORWARD);}
-     else if(motor_speed < 0){ motor.motorSpeed(pwm, BACKWARD);}
+     if(motor_speed > 0){ motor.motorSpeed(u, FORWARD);}
+     else if(motor_speed < 0){ motor.motorSpeed(u, BACKWARD);}
      else if(motor_speed == 0){motor.motorSpeed(0, STOP);}
 
      motor.setAngle(angle);
