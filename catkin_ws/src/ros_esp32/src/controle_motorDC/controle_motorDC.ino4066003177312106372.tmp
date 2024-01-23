@@ -102,8 +102,9 @@ void setup() {
 }
 
 void loop() {
-   int r = map(analogRead(potPin), 0, 4095, 0, 280);
-//    Controller.r(0) = val;
+   int r = map(analogRead(potPin), 0, 4095, 0, 255);
+//  int r = 160;
+//    Controller.r(0) = val;/
 //  mpu6050.update_mpu();
 
   if (millis() - timer >= intervalo) {
@@ -122,9 +123,9 @@ void loop() {
      
 //     states = motorFilter.kalman(u, rpm);
 //     u = Controller.controlLaw(states, y); 
-     saturate(&u,80,230);  
+//     saturate(&u,100,230);  
     
-     Serial.printf("r:%d RPM:%.2f u:%.2f\n",r, rpm, u);
+     Serial.printf("r:%d RPM:%.2f\n",r, rpm);
 //    Serial.printf("RPM:%.2f  AS5600_L: %.2f  AS5600_R: %.2f  Z_angle: %.2f\n", rpm, enc_as5600_L, enc_as5600_R, mpu6050.angularVelocityZ);
 //     Serial.printf("r:%.2f  x_hat:%.2f y: %.2f\n", Controller.r(0), states(0), rpm);
     motor.motorSpeed(u, FORWARD); // Min = 150 || Max = 230
