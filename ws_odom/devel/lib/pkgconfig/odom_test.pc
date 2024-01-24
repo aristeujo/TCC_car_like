@@ -1,0 +1,8 @@
+prefix=/home/graest/TCC/ws_odom/devel
+
+Name: odom_test
+Description: Description of odom_test
+Version: 0.0.0
+Cflags: 
+Libs: -L${prefix}/lib 
+Requires: 

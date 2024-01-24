@@ -1,0 +1,2 @@
+odom_test
+-DCATKIN_DEVEL_PREFIX=/home/graest/TCC/ws_odom/devel -DCMAKE_INSTALL_PREFIX=/home/graest/TCC/ws_odom/install -G Unix Makefiles
