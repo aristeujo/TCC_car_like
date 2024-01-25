@@ -8,14 +8,16 @@ import struct
 
 
 class Sensors(genpy.Message):
-  _md5sum = "4fb8452640ac8fb23177d835e52d73c4"
+  _md5sum = "52013037679213ea4ad08aa61ccef2b0"
   _type = "my_project_msgs/Sensors"
   _has_header = False  # flag to mark the presence of a Header object
   _full_text = """float64 encoder_eixo
 float64 encoder_as5600_R
-float64 encoder_as5600_L"""
-  __slots__ = ['encoder_eixo','encoder_as5600_R','encoder_as5600_L']
-  _slot_types = ['float64','float64','float64']
+float64 encoder_as5600_L
+float64 Yaw
+float64 servo_angle"""
+  __slots__ = ['encoder_eixo','encoder_as5600_R','encoder_as5600_L','Yaw','servo_angle']
+  _slot_types = ['float64','float64','float64','float64','float64']
 
   def __init__(self, *args, **kwds):
     """
@@ -25,7 +27,7 @@ float64 encoder_as5600_L"""
     changes.  You cannot mix in-order arguments and keyword arguments.
 
     The available fields are:
-       encoder_eixo,encoder_as5600_R,encoder_as5600_L
+       encoder_eixo,encoder_as5600_R,encoder_as5600_L,Yaw,servo_angle
 
     :param args: complete set of field values, in .msg order
     :param kwds: use keyword arguments corresponding to message field names
@@ -40,10 +42,16 @@ float64 encoder_as5600_L"""
         self.encoder_as5600_R = 0.
       if self.encoder_as5600_L is None:
         self.encoder_as5600_L = 0.
+      if self.Yaw is None:
+        self.Yaw = 0.
+      if self.servo_angle is None:
+        self.servo_angle = 0.
     else:
       self.encoder_eixo = 0.
       self.encoder_as5600_R = 0.
       self.encoder_as5600_L = 0.
+      self.Yaw = 0.
+      self.servo_angle = 0.
 
   def _get_types(self):
     """
@@ -58,7 +66,7 @@ float64 encoder_as5600_L"""
     """
     try:
       _x = self
-      buff.write(_get_struct_3d().pack(_x.encoder_eixo, _x.encoder_as5600_R, _x.encoder_as5600_L))
+      buff.write(_get_struct_5d().pack(_x.encoder_eixo, _x.encoder_as5600_R, _x.encoder_as5600_L, _x.Yaw, _x.servo_angle))
     except struct.error as se: self._check_types(struct.error("%s: '%s' when writing '%s'" % (type(se), str(se), str(locals().get('_x', self)))))
     except TypeError as te: self._check_types(ValueError("%s: '%s' when writing '%s'" % (type(te), str(te), str(locals().get('_x', self)))))
 
@@ -73,8 +81,8 @@ float64 encoder_as5600_L"""
       end = 0
       _x = self
       start = end
-      end += 24
-      (_x.encoder_eixo, _x.encoder_as5600_R, _x.encoder_as5600_L,) = _get_struct_3d().unpack(str[start:end])
+      end += 40
+      (_x.encoder_eixo, _x.encoder_as5600_R, _x.encoder_as5600_L, _x.Yaw, _x.servo_angle,) = _get_struct_5d().unpack(str[start:end])
       return self
     except struct.error as e:
       raise genpy.DeserializationError(e)  # most likely buffer underfill
@@ -88,7 +96,7 @@ float64 encoder_as5600_L"""
     """
     try:
       _x = self
-      buff.write(_get_struct_3d().pack(_x.encoder_eixo, _x.encoder_as5600_R, _x.encoder_as5600_L))
+      buff.write(_get_struct_5d().pack(_x.encoder_eixo, _x.encoder_as5600_R, _x.encoder_as5600_L, _x.Yaw, _x.servo_angle))
     except struct.error as se: self._check_types(struct.error("%s: '%s' when writing '%s'" % (type(se), str(se), str(locals().get('_x', self)))))
     except TypeError as te: self._check_types(ValueError("%s: '%s' when writing '%s'" % (type(te), str(te), str(locals().get('_x', self)))))
 
@@ -104,8 +112,8 @@ float64 encoder_as5600_L"""
       end = 0
       _x = self
       start = end
-      end += 24
-      (_x.encoder_eixo, _x.encoder_as5600_R, _x.encoder_as5600_L,) = _get_struct_3d().unpack(str[start:end])
+      end += 40
+      (_x.encoder_eixo, _x.encoder_as5600_R, _x.encoder_as5600_L, _x.Yaw, _x.servo_angle,) = _get_struct_5d().unpack(str[start:end])
       return self
     except struct.error as e:
       raise genpy.DeserializationError(e)  # most likely buffer underfill
@@ -114,9 +122,9 @@ _struct_I = genpy.struct_I
 def _get_struct_I():
     global _struct_I
     return _struct_I
-_struct_3d = None
-def _get_struct_3d():
-    global _struct_3d
-    if _struct_3d is None:
-        _struct_3d = struct.Struct("<3d")
-    return _struct_3d
+_struct_5d = None
+def _get_struct_5d():
+    global _struct_5d
+    if _struct_5d is None:
+        _struct_5d = struct.Struct("<5d")
+    return _struct_5d

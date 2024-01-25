@@ -1,8 +1,8 @@
-# Install script for directory: /home/aristeujo/TCC/catkin_ws/src/ackermann-drive-teleop
+# Install script for directory: /home/graest/TCC/catkin_ws/src/ackermann-drive-teleop
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
-  set(CMAKE_INSTALL_PREFIX "/home/aristeujo/TCC/catkin_ws/install")
+  set(CMAKE_INSTALL_PREFIX "/home/graest/TCC/catkin_ws/install")
 endif()
 string(REGEX REPLACE "/$" "" CMAKE_INSTALL_PREFIX "${CMAKE_INSTALL_PREFIX}")
 
@@ -38,25 +38,25 @@ if(NOT DEFINED CMAKE_CROSSCOMPILING)
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/pkgconfig" TYPE FILE FILES "/home/aristeujo/TCC/catkin_ws/build/ackermann-drive-teleop/catkin_generated/installspace/ackermann_drive_teleop.pc")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/pkgconfig" TYPE FILE FILES "/home/graest/TCC/catkin_ws/build/ackermann-drive-teleop/catkin_generated/installspace/ackermann_drive_teleop.pc")
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
   file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/ackermann_drive_teleop/cmake" TYPE FILE FILES
-    "/home/aristeujo/TCC/catkin_ws/build/ackermann-drive-teleop/catkin_generated/installspace/ackermann_drive_teleopConfig.cmake"
-    "/home/aristeujo/TCC/catkin_ws/build/ackermann-drive-teleop/catkin_generated/installspace/ackermann_drive_teleopConfig-version.cmake"
+    "/home/graest/TCC/catkin_ws/build/ackermann-drive-teleop/catkin_generated/installspace/ackermann_drive_teleopConfig.cmake"
+    "/home/graest/TCC/catkin_ws/build/ackermann-drive-teleop/catkin_generated/installspace/ackermann_drive_teleopConfig-version.cmake"
     )
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/ackermann_drive_teleop" TYPE FILE FILES "/home/aristeujo/TCC/catkin_ws/src/ackermann-drive-teleop/package.xml")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/ackermann_drive_teleop" TYPE FILE FILES "/home/graest/TCC/catkin_ws/src/ackermann-drive-teleop/package.xml")
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/ackermann_drive_teleop" TYPE PROGRAM FILES "/home/aristeujo/TCC/catkin_ws/build/ackermann-drive-teleop/catkin_generated/installspace/joyop.py")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/ackermann_drive_teleop" TYPE PROGRAM FILES "/home/graest/TCC/catkin_ws/build/ackermann-drive-teleop/catkin_generated/installspace/joyop.py")
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/ackermann_drive_teleop" TYPE PROGRAM FILES "/home/aristeujo/TCC/catkin_ws/build/ackermann-drive-teleop/catkin_generated/installspace/keyop.py")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/ackermann_drive_teleop" TYPE PROGRAM FILES "/home/graest/TCC/catkin_ws/build/ackermann-drive-teleop/catkin_generated/installspace/keyop.py")
 endif()
 

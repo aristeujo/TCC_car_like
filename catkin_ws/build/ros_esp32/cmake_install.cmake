@@ -1,8 +1,8 @@
-# Install script for directory: /home/aristeujo/TCC/catkin_ws/src/ros_esp32
+# Install script for directory: /home/graest/TCC/catkin_ws/src/ros_esp32
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
-  set(CMAKE_INSTALL_PREFIX "/home/aristeujo/TCC/catkin_ws/install")
+  set(CMAKE_INSTALL_PREFIX "/home/graest/TCC/catkin_ws/install")
 endif()
 string(REGEX REPLACE "/$" "" CMAKE_INSTALL_PREFIX "${CMAKE_INSTALL_PREFIX}")
 
@@ -38,17 +38,17 @@ if(NOT DEFINED CMAKE_CROSSCOMPILING)
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/pkgconfig" TYPE FILE FILES "/home/aristeujo/TCC/catkin_ws/build/ros_esp32/catkin_generated/installspace/ros_esp32.pc")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/pkgconfig" TYPE FILE FILES "/home/graest/TCC/catkin_ws/build/ros_esp32/catkin_generated/installspace/ros_esp32.pc")
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
   file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/ros_esp32/cmake" TYPE FILE FILES
-    "/home/aristeujo/TCC/catkin_ws/build/ros_esp32/catkin_generated/installspace/ros_esp32Config.cmake"
-    "/home/aristeujo/TCC/catkin_ws/build/ros_esp32/catkin_generated/installspace/ros_esp32Config-version.cmake"
+    "/home/graest/TCC/catkin_ws/build/ros_esp32/catkin_generated/installspace/ros_esp32Config.cmake"
+    "/home/graest/TCC/catkin_ws/build/ros_esp32/catkin_generated/installspace/ros_esp32Config-version.cmake"
     )
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/ros_esp32" TYPE FILE FILES "/home/aristeujo/TCC/catkin_ws/src/ros_esp32/package.xml")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/ros_esp32" TYPE FILE FILES "/home/graest/TCC/catkin_ws/src/ros_esp32/package.xml")
 endif()
 

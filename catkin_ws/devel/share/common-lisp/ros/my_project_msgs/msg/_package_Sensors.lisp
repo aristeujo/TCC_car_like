@@ -5,4 +5,8 @@
           ENCODER_AS5600_R
           ENCODER_AS5600_L-VAL
           ENCODER_AS5600_L
+          YAW-VAL
+          YAW
+          SERVO_ANGLE-VAL
+          SERVO_ANGLE
 ))

@@ -1,4 +1,4 @@
-prefix=/home/aristeujo/TCC/catkin_ws/install
+prefix=/home/graest/TCC/catkin_ws/install
 
 Name: ackermann_drive_teleop
 Description: Description of ackermann_drive_teleop

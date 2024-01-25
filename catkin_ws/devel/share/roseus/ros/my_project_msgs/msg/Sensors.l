@@ -14,7 +14,7 @@
 
 (defclass my_project_msgs::Sensors
   :super ros::object
-  :slots (_encoder_eixo _encoder_as5600_R _encoder_as5600_L ))
+  :slots (_encoder_eixo _encoder_as5600_R _encoder_as5600_L _Yaw _servo_angle ))
 
 (defmethod my_project_msgs::Sensors
   (:init
@@ -22,11 +22,15 @@
     ((:encoder_eixo __encoder_eixo) 0.0)
     ((:encoder_as5600_R __encoder_as5600_R) 0.0)
     ((:encoder_as5600_L __encoder_as5600_L) 0.0)
+    ((:Yaw __Yaw) 0.0)
+    ((:servo_angle __servo_angle) 0.0)
     )
    (send-super :init)
    (setq _encoder_eixo (float __encoder_eixo))
    (setq _encoder_as5600_R (float __encoder_as5600_R))
    (setq _encoder_as5600_L (float __encoder_as5600_L))
+   (setq _Yaw (float __Yaw))
+   (setq _servo_angle (float __servo_angle))
    self)
   (:encoder_eixo
    (&optional __encoder_eixo)
@@ -37,6 +41,12 @@
   (:encoder_as5600_L
    (&optional __encoder_as5600_L)
    (if __encoder_as5600_L (setq _encoder_as5600_L __encoder_as5600_L)) _encoder_as5600_L)
+  (:Yaw
+   (&optional __Yaw)
+   (if __Yaw (setq _Yaw __Yaw)) _Yaw)
+  (:servo_angle
+   (&optional __servo_angle)
+   (if __servo_angle (setq _servo_angle __servo_angle)) _servo_angle)
   (:serialization-length
    ()
    (+
@@ -45,6 +55,10 @@
     ;; float64 _encoder_as5600_R
     8
     ;; float64 _encoder_as5600_L
+    8
+    ;; float64 _Yaw
+    8
+    ;; float64 _servo_angle
     8
     ))
   (:serialize
@@ -57,6 +71,10 @@
        (sys::poke _encoder_as5600_R (send s :buffer) (send s :count) :double) (incf (stream-count s) 8)
      ;; float64 _encoder_as5600_L
        (sys::poke _encoder_as5600_L (send s :buffer) (send s :count) :double) (incf (stream-count s) 8)
+     ;; float64 _Yaw
+       (sys::poke _Yaw (send s :buffer) (send s :count) :double) (incf (stream-count s) 8)
+     ;; float64 _servo_angle
+       (sys::poke _servo_angle (send s :buffer) (send s :count) :double) (incf (stream-count s) 8)
      ;;
      (if (null strm) (get-output-stream-string s))))
   (:deserialize
@@ -67,20 +85,26 @@
      (setq _encoder_as5600_R (sys::peek buf ptr- :double)) (incf ptr- 8)
    ;; float64 _encoder_as5600_L
      (setq _encoder_as5600_L (sys::peek buf ptr- :double)) (incf ptr- 8)
+   ;; float64 _Yaw
+     (setq _Yaw (sys::peek buf ptr- :double)) (incf ptr- 8)
+   ;; float64 _servo_angle
+     (setq _servo_angle (sys::peek buf ptr- :double)) (incf ptr- 8)
    ;;
    self)
   )
 
-(setf (get my_project_msgs::Sensors :md5sum-) "4fb8452640ac8fb23177d835e52d73c4")
+(setf (get my_project_msgs::Sensors :md5sum-) "52013037679213ea4ad08aa61ccef2b0")
 (setf (get my_project_msgs::Sensors :datatype-) "my_project_msgs/Sensors")
 (setf (get my_project_msgs::Sensors :definition-)
       "float64 encoder_eixo
 float64 encoder_as5600_R
 float64 encoder_as5600_L
+float64 Yaw
+float64 servo_angle
 ")
 
 
 
-(provide :my_project_msgs/Sensors "4fb8452640ac8fb23177d835e52d73c4")
+(provide :my_project_msgs/Sensors "52013037679213ea4ad08aa61ccef2b0")
 
 

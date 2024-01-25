@@ -1,6 +1,6 @@
 file(REMOVE_RECURSE
-  "/home/aristeujo/TCC/catkin_ws/devel/share/roseus/ros/my_project_msgs/manifest.l"
-  "/home/aristeujo/TCC/catkin_ws/devel/share/roseus/ros/my_project_msgs/msg/Sensors.l"
+  "/home/graest/TCC/catkin_ws/devel/share/roseus/ros/my_project_msgs/manifest.l"
+  "/home/graest/TCC/catkin_ws/devel/share/roseus/ros/my_project_msgs/msg/Sensors.l"
   "CMakeFiles/my_project_msgs_generate_messages_eus"
 )
 

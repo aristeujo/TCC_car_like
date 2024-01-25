@@ -1,3 +1,5 @@
 float64 encoder_eixo
 float64 encoder_as5600_R
 float64 encoder_as5600_L
+float64 Yaw
+float64 servo_angle

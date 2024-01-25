@@ -1,4 +1,4 @@
-prefix=/home/aristeujo/TCC/catkin_ws/install
+prefix=/home/graest/TCC/catkin_ws/install
 
 Name: ros_esp32
 Description: Description of ros_esp32

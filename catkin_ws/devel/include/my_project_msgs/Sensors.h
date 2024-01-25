@@ -26,12 +26,16 @@ struct Sensors_
   Sensors_()
     : encoder_eixo(0.0)
     , encoder_as5600_R(0.0)
-    , encoder_as5600_L(0.0)  {
+    , encoder_as5600_L(0.0)
+    , Yaw(0.0)
+    , servo_angle(0.0)  {
     }
   Sensors_(const ContainerAllocator& _alloc)
     : encoder_eixo(0.0)
     , encoder_as5600_R(0.0)
-    , encoder_as5600_L(0.0)  {
+    , encoder_as5600_L(0.0)
+    , Yaw(0.0)
+    , servo_angle(0.0)  {
   (void)_alloc;
     }
 
@@ -45,6 +49,12 @@ struct Sensors_
 
    typedef double _encoder_as5600_L_type;
   _encoder_as5600_L_type encoder_as5600_L;
+
+   typedef double _Yaw_type;
+  _Yaw_type Yaw;
+
+   typedef double _servo_angle_type;
+  _servo_angle_type servo_angle;
 
 
 
@@ -77,7 +87,9 @@ bool operator==(const ::my_project_msgs::Sensors_<ContainerAllocator1> & lhs, co
 {
   return lhs.encoder_eixo == rhs.encoder_eixo &&
     lhs.encoder_as5600_R == rhs.encoder_as5600_R &&
-    lhs.encoder_as5600_L == rhs.encoder_as5600_L;
+    lhs.encoder_as5600_L == rhs.encoder_as5600_L &&
+    lhs.Yaw == rhs.Yaw &&
+    lhs.servo_angle == rhs.servo_angle;
 }
 
 template<typename ContainerAllocator1, typename ContainerAllocator2>
@@ -134,12 +146,12 @@ struct MD5Sum< ::my_project_msgs::Sensors_<ContainerAllocator> >
 {
   static const char* value()
   {
-    return "4fb8452640ac8fb23177d835e52d73c4";
+    return "52013037679213ea4ad08aa61ccef2b0";
   }
 
   static const char* value(const ::my_project_msgs::Sensors_<ContainerAllocator>&) { return value(); }
-  static const uint64_t static_value1 = 0x4fb8452640ac8fb2ULL;
-  static const uint64_t static_value2 = 0x3177d835e52d73c4ULL;
+  static const uint64_t static_value1 = 0x52013037679213eaULL;
+  static const uint64_t static_value2 = 0x4ad08aa61ccef2b0ULL;
 };
 
 template<class ContainerAllocator>
@@ -161,6 +173,8 @@ struct Definition< ::my_project_msgs::Sensors_<ContainerAllocator> >
     return "float64 encoder_eixo\n"
 "float64 encoder_as5600_R\n"
 "float64 encoder_as5600_L\n"
+"float64 Yaw\n"
+"float64 servo_angle\n"
 ;
   }
 
@@ -182,6 +196,8 @@ namespace serialization
       stream.next(m.encoder_eixo);
       stream.next(m.encoder_as5600_R);
       stream.next(m.encoder_as5600_L);
+      stream.next(m.Yaw);
+      stream.next(m.servo_angle);
     }
 
     ROS_DECLARE_ALLINONE_SERIALIZER
@@ -206,6 +222,10 @@ struct Printer< ::my_project_msgs::Sensors_<ContainerAllocator> >
     Printer<double>::stream(s, indent + "  ", v.encoder_as5600_R);
     s << indent << "encoder_as5600_L: ";
     Printer<double>::stream(s, indent + "  ", v.encoder_as5600_L);
+    s << indent << "Yaw: ";
+    Printer<double>::stream(s, indent + "  ", v.Yaw);
+    s << indent << "servo_angle: ";
+    Printer<double>::stream(s, indent + "  ", v.servo_angle);
   }
 };
 

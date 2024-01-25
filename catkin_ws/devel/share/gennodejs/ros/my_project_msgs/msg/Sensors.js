@@ -21,6 +21,8 @@ class Sensors {
       this.encoder_eixo = null;
       this.encoder_as5600_R = null;
       this.encoder_as5600_L = null;
+      this.Yaw = null;
+      this.servo_angle = null;
     }
     else {
       if (initObj.hasOwnProperty('encoder_eixo')) {
@@ -41,6 +43,18 @@ class Sensors {
       else {
         this.encoder_as5600_L = 0.0;
       }
+      if (initObj.hasOwnProperty('Yaw')) {
+        this.Yaw = initObj.Yaw
+      }
+      else {
+        this.Yaw = 0.0;
+      }
+      if (initObj.hasOwnProperty('servo_angle')) {
+        this.servo_angle = initObj.servo_angle
+      }
+      else {
+        this.servo_angle = 0.0;
+      }
     }
   }
 
@@ -52,6 +66,10 @@ class Sensors {
     bufferOffset = _serializer.float64(obj.encoder_as5600_R, buffer, bufferOffset);
     // Serialize message field [encoder_as5600_L]
     bufferOffset = _serializer.float64(obj.encoder_as5600_L, buffer, bufferOffset);
+    // Serialize message field [Yaw]
+    bufferOffset = _serializer.float64(obj.Yaw, buffer, bufferOffset);
+    // Serialize message field [servo_angle]
+    bufferOffset = _serializer.float64(obj.servo_angle, buffer, bufferOffset);
     return bufferOffset;
   }
 
@@ -65,11 +83,15 @@ class Sensors {
     data.encoder_as5600_R = _deserializer.float64(buffer, bufferOffset);
     // Deserialize message field [encoder_as5600_L]
     data.encoder_as5600_L = _deserializer.float64(buffer, bufferOffset);
+    // Deserialize message field [Yaw]
+    data.Yaw = _deserializer.float64(buffer, bufferOffset);
+    // Deserialize message field [servo_angle]
+    data.servo_angle = _deserializer.float64(buffer, bufferOffset);
     return data;
   }
 
   static getMessageSize(object) {
-    return 24;
+    return 40;
   }
 
   static datatype() {
@@ -79,7 +101,7 @@ class Sensors {
 
   static md5sum() {
     //Returns md5sum for a message object
-    return '4fb8452640ac8fb23177d835e52d73c4';
+    return '52013037679213ea4ad08aa61ccef2b0';
   }
 
   static messageDefinition() {
@@ -88,6 +110,8 @@ class Sensors {
     float64 encoder_eixo
     float64 encoder_as5600_R
     float64 encoder_as5600_L
+    float64 Yaw
+    float64 servo_angle
     `;
   }
 
@@ -116,6 +140,20 @@ class Sensors {
     }
     else {
       resolved.encoder_as5600_L = 0.0
+    }
+
+    if (msg.Yaw !== undefined) {
+      resolved.Yaw = msg.Yaw;
+    }
+    else {
+      resolved.Yaw = 0.0
+    }
+
+    if (msg.servo_angle !== undefined) {
+      resolved.servo_angle = msg.servo_angle;
+    }
+    else {
+      resolved.servo_angle = 0.0
     }
 
     return resolved;
