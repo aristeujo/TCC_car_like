@@ -6,29 +6,13 @@
 
 #IncludeRegexTransform: 
 
-/home/graest/TCC/catkin_ws/devel/include/my_project_msgs/Sensors.h
-string
--
-vector
--
-memory
--
-ros/types.h
--
-ros/serialization.h
--
-ros/builtin_message_traits.h
--
-ros/message_operations.h
--
-
-/home/graest/TCC/catkin_ws/src/ros_esp32/src/sensors_node.cpp
+/home/aristeujo/Documentos/TCC_codes/catkin_ws/src/ros_esp32/src/sensors_node.cpp
 ros/ros.h
-/home/graest/TCC/catkin_ws/src/ros_esp32/src/ros/ros.h
+/home/aristeujo/Documentos/TCC_codes/catkin_ws/src/ros_esp32/src/ros/ros.h
 tf/transform_broadcaster.h
 -
 my_project_msgs/Sensors.h
-/home/graest/TCC/catkin_ws/src/ros_esp32/src/my_project_msgs/Sensors.h
+/home/aristeujo/Documentos/TCC_codes/catkin_ws/src/ros_esp32/src/my_project_msgs/Sensors.h
 nav_msgs/Odometry.h
 -
 math.h

@@ -43,10 +43,10 @@ RM = /usr/bin/cmake -E remove -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/graest/TCC/ws_odom/src
+CMAKE_SOURCE_DIR = /home/aristeujo/Documentos/TCC_codes/ws_odom/src
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/graest/TCC/ws_odom/build
+CMAKE_BINARY_DIR = /home/aristeujo/Documentos/TCC_codes/ws_odom/build
 
 # Utility rule file for doxygen.
 
@@ -67,6 +67,6 @@ CMakeFiles/doxygen.dir/clean:
 .PHONY : CMakeFiles/doxygen.dir/clean
 
 CMakeFiles/doxygen.dir/depend:
-	cd /home/graest/TCC/ws_odom/build && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/graest/TCC/ws_odom/src /home/graest/TCC/ws_odom/src /home/graest/TCC/ws_odom/build /home/graest/TCC/ws_odom/build /home/graest/TCC/ws_odom/build/CMakeFiles/doxygen.dir/DependInfo.cmake --color=$(COLOR)
+	cd /home/aristeujo/Documentos/TCC_codes/ws_odom/build && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/aristeujo/Documentos/TCC_codes/ws_odom/src /home/aristeujo/Documentos/TCC_codes/ws_odom/src /home/aristeujo/Documentos/TCC_codes/ws_odom/build /home/aristeujo/Documentos/TCC_codes/ws_odom/build /home/aristeujo/Documentos/TCC_codes/ws_odom/build/CMakeFiles/doxygen.dir/DependInfo.cmake --color=$(COLOR)
 .PHONY : CMakeFiles/doxygen.dir/depend
 

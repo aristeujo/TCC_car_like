@@ -1,5 +1,5 @@
 file(REMOVE_RECURSE
-  "/home/graest/TCC/catkin_ws/devel/share/gennodejs/ros/my_project_msgs/msg/Sensors.js"
+  "/home/aristeujo/Documentos/TCC_codes/catkin_ws/devel/share/gennodejs/ros/my_project_msgs/msg/Sensors.js"
   "CMakeFiles/my_project_msgs_generate_messages_nodejs"
 )
 

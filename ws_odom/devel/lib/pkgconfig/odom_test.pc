@@ -1,4 +1,4 @@
-prefix=/home/graest/TCC/ws_odom/devel
+prefix=/home/aristeujo/Documentos/TCC_codes/ws_odom/devel
 
 Name: odom_test
 Description: Description of odom_test

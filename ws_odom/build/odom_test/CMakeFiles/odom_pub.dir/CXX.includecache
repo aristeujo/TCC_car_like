@@ -6,7 +6,7 @@
 
 #IncludeRegexTransform: 
 
-/home/graest/TCC/ws_odom/src/odom_test/src/odom_pub.cpp
+/home/aristeujo/Documentos/TCC_codes/ws_odom/src/odom_test/src/odom_pub.cpp
 ros/ros.h
 -
 tf/transform_broadcaster.h

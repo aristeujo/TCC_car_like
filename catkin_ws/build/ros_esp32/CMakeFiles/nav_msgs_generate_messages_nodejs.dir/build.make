@@ -43,10 +43,10 @@ RM = /usr/bin/cmake -E remove -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/graest/TCC/catkin_ws/src
+CMAKE_SOURCE_DIR = /home/aristeujo/Documentos/TCC_codes/catkin_ws/src
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/graest/TCC/catkin_ws/build
+CMAKE_BINARY_DIR = /home/aristeujo/Documentos/TCC_codes/catkin_ws/build
 
 # Utility rule file for nav_msgs_generate_messages_nodejs.
 
@@ -63,10 +63,10 @@ ros_esp32/CMakeFiles/nav_msgs_generate_messages_nodejs.dir/build: nav_msgs_gener
 .PHONY : ros_esp32/CMakeFiles/nav_msgs_generate_messages_nodejs.dir/build
 
 ros_esp32/CMakeFiles/nav_msgs_generate_messages_nodejs.dir/clean:
-	cd /home/graest/TCC/catkin_ws/build/ros_esp32 && $(CMAKE_COMMAND) -P CMakeFiles/nav_msgs_generate_messages_nodejs.dir/cmake_clean.cmake
+	cd /home/aristeujo/Documentos/TCC_codes/catkin_ws/build/ros_esp32 && $(CMAKE_COMMAND) -P CMakeFiles/nav_msgs_generate_messages_nodejs.dir/cmake_clean.cmake
 .PHONY : ros_esp32/CMakeFiles/nav_msgs_generate_messages_nodejs.dir/clean
 
 ros_esp32/CMakeFiles/nav_msgs_generate_messages_nodejs.dir/depend:
-	cd /home/graest/TCC/catkin_ws/build && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/graest/TCC/catkin_ws/src /home/graest/TCC/catkin_ws/src/ros_esp32 /home/graest/TCC/catkin_ws/build /home/graest/TCC/catkin_ws/build/ros_esp32 /home/graest/TCC/catkin_ws/build/ros_esp32/CMakeFiles/nav_msgs_generate_messages_nodejs.dir/DependInfo.cmake --color=$(COLOR)
+	cd /home/aristeujo/Documentos/TCC_codes/catkin_ws/build && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/aristeujo/Documentos/TCC_codes/catkin_ws/src /home/aristeujo/Documentos/TCC_codes/catkin_ws/src/ros_esp32 /home/aristeujo/Documentos/TCC_codes/catkin_ws/build /home/aristeujo/Documentos/TCC_codes/catkin_ws/build/ros_esp32 /home/aristeujo/Documentos/TCC_codes/catkin_ws/build/ros_esp32/CMakeFiles/nav_msgs_generate_messages_nodejs.dir/DependInfo.cmake --color=$(COLOR)
 .PHONY : ros_esp32/CMakeFiles/nav_msgs_generate_messages_nodejs.dir/depend
 

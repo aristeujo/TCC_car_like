@@ -7,8 +7,7 @@
 # new environment variables
 
 # modified environment variables
-export CMAKE_PREFIX_PATH="/home/graest/TCC/ws_odom/devel:$CMAKE_PREFIX_PATH"
-export LD_LIBRARY_PATH="/home/graest/TCC/ws_odom/devel/lib:$LD_LIBRARY_PATH"
-export PWD='/home/graest/TCC/ws_odom/build'
-export ROSLISP_PACKAGE_DIRECTORIES='/home/graest/TCC/ws_odom/devel/share/common-lisp'
-export ROS_PACKAGE_PATH="/home/graest/TCC/ws_odom/src:$ROS_PACKAGE_PATH"
+export CMAKE_PREFIX_PATH="/home/aristeujo/Documentos/TCC_codes/ws_odom/devel:$CMAKE_PREFIX_PATH"
+export PWD='/home/aristeujo/Documentos/TCC_codes/ws_odom/build'
+export ROSLISP_PACKAGE_DIRECTORIES='/home/aristeujo/Documentos/TCC_codes/ws_odom/devel/share/common-lisp'
+export ROS_PACKAGE_PATH="/home/aristeujo/Documentos/TCC_codes/ws_odom/src:$ROS_PACKAGE_PATH"

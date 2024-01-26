@@ -24,28 +24,28 @@ void cmdVel_to_pwm( const ackermann_msgs::AckermannDriveStamped &velocity_msg);
 #define ENC_IN_B 13 // Fio Amarelo
 #define potPin  34
 
-// IPAddress server(192, 168, 0, 30); //IP do/ desktop da minha casa
+ IPAddress server(192, 168, 0, 30); //IP do/ desktop da minha casa
 
- IPAddress server(192, 168, 15, 6); //IP do/ desktop do Graest
+// IPAddress server(192, 168, 15, 6); //IP do/ desktop do Graest
 
 //IPAddress server(192,169,141,72); //IP do /notebook do STEM
 
 uint16_t serverPort = 11411;
-// const char*  ssid = "Seixas_Net";
-// const char*  password = "Mayum647";//
+ const char*  ssid = "Seixas_Net";
+ const char*  password = "Mayum647";//
 
 //const char*  ssid = "STEM_ALUNOS";
 //const char*  password = "1n0v@.st3m!!";
 
-const char*  ssid = "NucleoRobotica2g";
-const char*  password = "!gra.3st#";
+//const char*  ssid = "NucleoRobotica2g";
+//const char*  password = "!gra.3st#";
 
 
- ros::NodeHandle  nh;
- my_project_msgs::Sensors msg;
+ros::NodeHandle  nh;
+my_project_msgs::Sensors msg;
 
- ros::Publisher chatter("/sensors_values", &msg);
- ros::Subscriber<ackermann_msgs::AckermannDriveStamped> sub("/ackermann_cmd", &cmdVel_to_pwm );
+ros::Publisher chatter("/sensors_values", &msg);
+ros::Subscriber<ackermann_msgs::AckermannDriveStamped> sub("/ackermann_cmd", &cmdVel_to_pwm );
 
 Motor motor(18,19,4,27);
 Encoder encoder;
@@ -55,6 +55,14 @@ int pwm = 0;
 float u = 0;
 float angle = 0.0;
 float error = 0;
+
+//bateria antiga
+//float Kp = 1.9178;
+//float Ki = 0.5434;
+
+// bateria nova
+float Kp = 0.9672;
+float Ki = 0.5682;
 
 TwoWire Wire_1 = TwoWire(1);
 
@@ -103,7 +111,7 @@ void setup() {
 }
 
 void loop() {
-//   int r = map(analogRead(potPin), 0, 4095, 0, 280);
+   int r = map(analogRead(potPin), 0, 4095, 0, 280);
 
   // RPM setpoint
 //  int r = 210;
@@ -113,13 +121,14 @@ void loop() {
 
   // Loop every 100 ms
   if (millis() - timer >= intervalo) {
+//    long temp = millis();
     mpu6050.get_data();
 
     // Read sensor data
     float enc_as5600_L = encoder.getRPM_AS5600(as5600_0);
     float enc_as5600_R = encoder.getRPM_AS5600(as5600_1);
     float rpm = encoder.getRPM_MotorEixo(intervalo);
-    float theta_dot = mpu6050.angularVelocityZ; 
+//    float theta_dot = mpu6050.angularVelocityZ; 
 
     // offset stop state
     if(abs(enc_as5600_L) < 2.0){
@@ -131,7 +140,7 @@ void loop() {
 
      // Update control signal
      error += r - rpm; 
-     u = 1.9178 + (r - rpm) + 0.5434*error;
+     u = Kp*(r - rpm) + Ki*error;
      saturate(&u,0,230);  
 
      // Publish in ROS topic
@@ -143,13 +152,14 @@ void loop() {
      chatter.publish(&msg);
 
       // Debug info
-//      Serial.printf("r:%d RPM:%.2f u:%.2f\n",r, rpm, u);
+      Serial.printf("r:%d RPM:%.2f u:%.2f\n",r, rpm, u);
 //    Serial.printf("RPM:%.2f  AS5600_L: %.2f  AS5600_R: %.2f  Z_angle: %.2f\n", rpm, enc_as5600_L, enc_as5600_R, mpu6050.angularVelocityZ);
 //     Serial.printf("r:%.2f  x_hat:%.2f y: %.2f\n", Controller.r(0), states(0), rpm);
      motor.motorSpeed(u, FORWARD); // Min = 150 || Max = 230
     
-     nh.spinOnce();
+//     nh.spinOnce();
      timer = millis();
+//     Serial.println(timer - temp);
   }
   
 //  motor.motorSpeed(u, FORWARD); // Min = 150 || Max = 230
