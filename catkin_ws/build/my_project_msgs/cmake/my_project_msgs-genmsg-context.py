@@ -1,6 +1,6 @@
 # generated from genmsg/cmake/pkg-genmsg.context.in
 
-messages_str = "/home/aristeujo/TCC/catkin_ws/src/my_project_msgs/msg/Sensors.msg"
+messages_str = "/home/aristeujo/TCC/catkin_ws/src/my_project_msgs/msg/Sensors.msg;/home/aristeujo/TCC/catkin_ws/src/my_project_msgs/msg/Command_ackermann.msg"
 services_str = ""
 pkg_name = "my_project_msgs"
 dependencies_str = "std_msgs"

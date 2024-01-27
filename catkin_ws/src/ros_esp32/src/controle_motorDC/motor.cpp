@@ -23,7 +23,7 @@ void Motor::initMotor(){
   ledcAttachPin(this->enablePin, this->pwmChannel);
 
   servo.setPeriodHertz(50);  
-  servo.attach(this->servoPin, 1000, 2000); 
+  servo.attach(this->servoPin, 500, 2400); 
 };
 
 void Motor::motorSpeed(int velocidade, int sentido) {

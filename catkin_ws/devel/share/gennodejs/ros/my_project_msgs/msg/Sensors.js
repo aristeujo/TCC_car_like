@@ -21,8 +21,7 @@ class Sensors {
       this.encoder_eixo = null;
       this.encoder_as5600_R = null;
       this.encoder_as5600_L = null;
-      this.Yaw = null;
-      this.servo_angle = null;
+      this.angularVelocity = null;
     }
     else {
       if (initObj.hasOwnProperty('encoder_eixo')) {
@@ -43,17 +42,11 @@ class Sensors {
       else {
         this.encoder_as5600_L = 0.0;
       }
-      if (initObj.hasOwnProperty('Yaw')) {
-        this.Yaw = initObj.Yaw
+      if (initObj.hasOwnProperty('angularVelocity')) {
+        this.angularVelocity = initObj.angularVelocity
       }
       else {
-        this.Yaw = 0.0;
-      }
-      if (initObj.hasOwnProperty('servo_angle')) {
-        this.servo_angle = initObj.servo_angle
-      }
-      else {
-        this.servo_angle = 0.0;
+        this.angularVelocity = 0.0;
       }
     }
   }
@@ -66,10 +59,8 @@ class Sensors {
     bufferOffset = _serializer.float64(obj.encoder_as5600_R, buffer, bufferOffset);
     // Serialize message field [encoder_as5600_L]
     bufferOffset = _serializer.float64(obj.encoder_as5600_L, buffer, bufferOffset);
-    // Serialize message field [Yaw]
-    bufferOffset = _serializer.float64(obj.Yaw, buffer, bufferOffset);
-    // Serialize message field [servo_angle]
-    bufferOffset = _serializer.float64(obj.servo_angle, buffer, bufferOffset);
+    // Serialize message field [angularVelocity]
+    bufferOffset = _serializer.float64(obj.angularVelocity, buffer, bufferOffset);
     return bufferOffset;
   }
 
@@ -83,15 +74,13 @@ class Sensors {
     data.encoder_as5600_R = _deserializer.float64(buffer, bufferOffset);
     // Deserialize message field [encoder_as5600_L]
     data.encoder_as5600_L = _deserializer.float64(buffer, bufferOffset);
-    // Deserialize message field [Yaw]
-    data.Yaw = _deserializer.float64(buffer, bufferOffset);
-    // Deserialize message field [servo_angle]
-    data.servo_angle = _deserializer.float64(buffer, bufferOffset);
+    // Deserialize message field [angularVelocity]
+    data.angularVelocity = _deserializer.float64(buffer, bufferOffset);
     return data;
   }
 
   static getMessageSize(object) {
-    return 40;
+    return 32;
   }
 
   static datatype() {
@@ -101,7 +90,7 @@ class Sensors {
 
   static md5sum() {
     //Returns md5sum for a message object
-    return '52013037679213ea4ad08aa61ccef2b0';
+    return '62f67af364bf00eab808407950937dc4';
   }
 
   static messageDefinition() {
@@ -110,8 +99,7 @@ class Sensors {
     float64 encoder_eixo
     float64 encoder_as5600_R
     float64 encoder_as5600_L
-    float64 Yaw
-    float64 servo_angle
+    float64 angularVelocity
     `;
   }
 
@@ -142,18 +130,11 @@ class Sensors {
       resolved.encoder_as5600_L = 0.0
     }
 
-    if (msg.Yaw !== undefined) {
-      resolved.Yaw = msg.Yaw;
+    if (msg.angularVelocity !== undefined) {
+      resolved.angularVelocity = msg.angularVelocity;
     }
     else {
-      resolved.Yaw = 0.0
-    }
-
-    if (msg.servo_angle !== undefined) {
-      resolved.servo_angle = msg.servo_angle;
-    }
-    else {
-      resolved.servo_angle = 0.0
+      resolved.angularVelocity = 0.0
     }
 
     return resolved;

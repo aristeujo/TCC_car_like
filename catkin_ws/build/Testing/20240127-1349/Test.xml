@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Site BuildName="(empty)"
+	BuildStamp="20240127-1349-Experimental"
+	Name="aristeujo-ros"
+	Generator="ctest-3.16.3"
+	CompilerName="/usr/bin/c++"
+	CompilerVersion="9.4.0"
+	OSName="Linux"
+	Hostname="aristeujo-ros"
+	OSRelease="5.15.0-92-generic"
+	OSVersion="#102~20.04.1-Ubuntu SMP Mon Jan 15 13:09:14 UTC 2024"
+	OSPlatform="x86_64"
+	Is64Bits="1"
+	VendorString="AuthenticAMD"
+	VendorID="Advanced Micro Devices"
+	FamilyID="23"
+	ModelID="24"
+	ProcessorCacheSize="512"
+	NumberOfLogicalCPU="8"
+	NumberOfPhysicalCPU="4"
+	TotalVirtualMemory="2047"
+	TotalPhysicalMemory="30008"
+	LogicalProcessorsPerPhysical="2"
+	ProcessorClockFrequency="1577.88"
+	>
+	<Testing>
+		<StartDateTime>Jan 27 18:14 -04</StartDateTime>
+		<StartTestTime>1706393690</StartTestTime>
+		<TestList/>
+		<EndDateTime>Jan 27 18:14 -04</EndDateTime>
+		<EndTestTime>1706393690</EndTestTime>
+		<ElapsedMinutes>0</ElapsedMinutes>
+	</Testing>
+</Site>

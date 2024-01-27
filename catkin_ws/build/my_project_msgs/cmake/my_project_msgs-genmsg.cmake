@@ -1,6 +1,6 @@
 # generated from genmsg/cmake/pkg-genmsg.cmake.em
 
-message(STATUS "my_project_msgs: 1 messages, 0 services")
+message(STATUS "my_project_msgs: 2 messages, 0 services")
 
 set(MSG_I_FLAGS "-Imy_project_msgs:/home/aristeujo/TCC/catkin_ws/src/my_project_msgs/msg;-Istd_msgs:/opt/ros/noetic/share/std_msgs/cmake/../msg")
 
@@ -22,6 +22,11 @@ add_custom_target(_my_project_msgs_generate_messages_check_deps_${_filename}
   COMMAND ${CATKIN_ENV} ${PYTHON_EXECUTABLE} ${GENMSG_CHECK_DEPS_SCRIPT} "my_project_msgs" "/home/aristeujo/TCC/catkin_ws/src/my_project_msgs/msg/Sensors.msg" ""
 )
 
+get_filename_component(_filename "/home/aristeujo/TCC/catkin_ws/src/my_project_msgs/msg/Command_ackermann.msg" NAME_WE)
+add_custom_target(_my_project_msgs_generate_messages_check_deps_${_filename}
+  COMMAND ${CATKIN_ENV} ${PYTHON_EXECUTABLE} ${GENMSG_CHECK_DEPS_SCRIPT} "my_project_msgs" "/home/aristeujo/TCC/catkin_ws/src/my_project_msgs/msg/Command_ackermann.msg" ""
+)
+
 #
 #  langs = gencpp;geneus;genlisp;gennodejs;genpy
 #
@@ -30,6 +35,12 @@ add_custom_target(_my_project_msgs_generate_messages_check_deps_${_filename}
 ### Generating Messages
 _generate_msg_cpp(my_project_msgs
   "/home/aristeujo/TCC/catkin_ws/src/my_project_msgs/msg/Sensors.msg"
+  "${MSG_I_FLAGS}"
+  ""
+  ${CATKIN_DEVEL_PREFIX}/${gencpp_INSTALL_DIR}/my_project_msgs
+)
+_generate_msg_cpp(my_project_msgs
+  "/home/aristeujo/TCC/catkin_ws/src/my_project_msgs/msg/Command_ackermann.msg"
   "${MSG_I_FLAGS}"
   ""
   ${CATKIN_DEVEL_PREFIX}/${gencpp_INSTALL_DIR}/my_project_msgs
@@ -51,6 +62,8 @@ add_dependencies(my_project_msgs_generate_messages my_project_msgs_generate_mess
 # add dependencies to all check dependencies targets
 get_filename_component(_filename "/home/aristeujo/TCC/catkin_ws/src/my_project_msgs/msg/Sensors.msg" NAME_WE)
 add_dependencies(my_project_msgs_generate_messages_cpp _my_project_msgs_generate_messages_check_deps_${_filename})
+get_filename_component(_filename "/home/aristeujo/TCC/catkin_ws/src/my_project_msgs/msg/Command_ackermann.msg" NAME_WE)
+add_dependencies(my_project_msgs_generate_messages_cpp _my_project_msgs_generate_messages_check_deps_${_filename})
 
 # target for backward compatibility
 add_custom_target(my_project_msgs_gencpp)
@@ -63,6 +76,12 @@ list(APPEND ${PROJECT_NAME}_EXPORTED_TARGETS my_project_msgs_generate_messages_c
 ### Generating Messages
 _generate_msg_eus(my_project_msgs
   "/home/aristeujo/TCC/catkin_ws/src/my_project_msgs/msg/Sensors.msg"
+  "${MSG_I_FLAGS}"
+  ""
+  ${CATKIN_DEVEL_PREFIX}/${geneus_INSTALL_DIR}/my_project_msgs
+)
+_generate_msg_eus(my_project_msgs
+  "/home/aristeujo/TCC/catkin_ws/src/my_project_msgs/msg/Command_ackermann.msg"
   "${MSG_I_FLAGS}"
   ""
   ${CATKIN_DEVEL_PREFIX}/${geneus_INSTALL_DIR}/my_project_msgs
@@ -84,6 +103,8 @@ add_dependencies(my_project_msgs_generate_messages my_project_msgs_generate_mess
 # add dependencies to all check dependencies targets
 get_filename_component(_filename "/home/aristeujo/TCC/catkin_ws/src/my_project_msgs/msg/Sensors.msg" NAME_WE)
 add_dependencies(my_project_msgs_generate_messages_eus _my_project_msgs_generate_messages_check_deps_${_filename})
+get_filename_component(_filename "/home/aristeujo/TCC/catkin_ws/src/my_project_msgs/msg/Command_ackermann.msg" NAME_WE)
+add_dependencies(my_project_msgs_generate_messages_eus _my_project_msgs_generate_messages_check_deps_${_filename})
 
 # target for backward compatibility
 add_custom_target(my_project_msgs_geneus)
@@ -96,6 +117,12 @@ list(APPEND ${PROJECT_NAME}_EXPORTED_TARGETS my_project_msgs_generate_messages_e
 ### Generating Messages
 _generate_msg_lisp(my_project_msgs
   "/home/aristeujo/TCC/catkin_ws/src/my_project_msgs/msg/Sensors.msg"
+  "${MSG_I_FLAGS}"
+  ""
+  ${CATKIN_DEVEL_PREFIX}/${genlisp_INSTALL_DIR}/my_project_msgs
+)
+_generate_msg_lisp(my_project_msgs
+  "/home/aristeujo/TCC/catkin_ws/src/my_project_msgs/msg/Command_ackermann.msg"
   "${MSG_I_FLAGS}"
   ""
   ${CATKIN_DEVEL_PREFIX}/${genlisp_INSTALL_DIR}/my_project_msgs
@@ -117,6 +144,8 @@ add_dependencies(my_project_msgs_generate_messages my_project_msgs_generate_mess
 # add dependencies to all check dependencies targets
 get_filename_component(_filename "/home/aristeujo/TCC/catkin_ws/src/my_project_msgs/msg/Sensors.msg" NAME_WE)
 add_dependencies(my_project_msgs_generate_messages_lisp _my_project_msgs_generate_messages_check_deps_${_filename})
+get_filename_component(_filename "/home/aristeujo/TCC/catkin_ws/src/my_project_msgs/msg/Command_ackermann.msg" NAME_WE)
+add_dependencies(my_project_msgs_generate_messages_lisp _my_project_msgs_generate_messages_check_deps_${_filename})
 
 # target for backward compatibility
 add_custom_target(my_project_msgs_genlisp)
@@ -129,6 +158,12 @@ list(APPEND ${PROJECT_NAME}_EXPORTED_TARGETS my_project_msgs_generate_messages_l
 ### Generating Messages
 _generate_msg_nodejs(my_project_msgs
   "/home/aristeujo/TCC/catkin_ws/src/my_project_msgs/msg/Sensors.msg"
+  "${MSG_I_FLAGS}"
+  ""
+  ${CATKIN_DEVEL_PREFIX}/${gennodejs_INSTALL_DIR}/my_project_msgs
+)
+_generate_msg_nodejs(my_project_msgs
+  "/home/aristeujo/TCC/catkin_ws/src/my_project_msgs/msg/Command_ackermann.msg"
   "${MSG_I_FLAGS}"
   ""
   ${CATKIN_DEVEL_PREFIX}/${gennodejs_INSTALL_DIR}/my_project_msgs
@@ -150,6 +185,8 @@ add_dependencies(my_project_msgs_generate_messages my_project_msgs_generate_mess
 # add dependencies to all check dependencies targets
 get_filename_component(_filename "/home/aristeujo/TCC/catkin_ws/src/my_project_msgs/msg/Sensors.msg" NAME_WE)
 add_dependencies(my_project_msgs_generate_messages_nodejs _my_project_msgs_generate_messages_check_deps_${_filename})
+get_filename_component(_filename "/home/aristeujo/TCC/catkin_ws/src/my_project_msgs/msg/Command_ackermann.msg" NAME_WE)
+add_dependencies(my_project_msgs_generate_messages_nodejs _my_project_msgs_generate_messages_check_deps_${_filename})
 
 # target for backward compatibility
 add_custom_target(my_project_msgs_gennodejs)
@@ -162,6 +199,12 @@ list(APPEND ${PROJECT_NAME}_EXPORTED_TARGETS my_project_msgs_generate_messages_n
 ### Generating Messages
 _generate_msg_py(my_project_msgs
   "/home/aristeujo/TCC/catkin_ws/src/my_project_msgs/msg/Sensors.msg"
+  "${MSG_I_FLAGS}"
+  ""
+  ${CATKIN_DEVEL_PREFIX}/${genpy_INSTALL_DIR}/my_project_msgs
+)
+_generate_msg_py(my_project_msgs
+  "/home/aristeujo/TCC/catkin_ws/src/my_project_msgs/msg/Command_ackermann.msg"
   "${MSG_I_FLAGS}"
   ""
   ${CATKIN_DEVEL_PREFIX}/${genpy_INSTALL_DIR}/my_project_msgs
@@ -182,6 +225,8 @@ add_dependencies(my_project_msgs_generate_messages my_project_msgs_generate_mess
 
 # add dependencies to all check dependencies targets
 get_filename_component(_filename "/home/aristeujo/TCC/catkin_ws/src/my_project_msgs/msg/Sensors.msg" NAME_WE)
+add_dependencies(my_project_msgs_generate_messages_py _my_project_msgs_generate_messages_check_deps_${_filename})
+get_filename_component(_filename "/home/aristeujo/TCC/catkin_ws/src/my_project_msgs/msg/Command_ackermann.msg" NAME_WE)
 add_dependencies(my_project_msgs_generate_messages_py _my_project_msgs_generate_messages_check_deps_${_filename})
 
 # target for backward compatibility

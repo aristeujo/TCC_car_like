@@ -15,6 +15,7 @@ find_package(catkin REQUIRED COMPONENTS
 add_message_files(
   FILES 
   Sensors.msg
+  Command_ackermann.msg
 )
 
 generate_messages(

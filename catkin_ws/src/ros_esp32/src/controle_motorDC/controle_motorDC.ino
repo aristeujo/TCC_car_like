@@ -9,12 +9,12 @@
 #include "AS5600.h"
 #include "giroscopio.h"
 #include <ros.h>
-#include <ackermann_msgs/AckermannDriveStamped.h>
 #include <my_project_msgs/Sensors.h>
+#include <my_project_msgs/Command_ackermann.h>
 
 void ISR_contador();
 void setupWiFi();
-void cmdVel_to_pwm( const ackermann_msgs::AckermannDriveStamped &velocity_msg);
+void cmdVel_to_pwm( const my_project_msgs::Command_ackermann &cmd);
 
 #define FORWARD 1
 #define BACKWARD 0
@@ -45,7 +45,7 @@ ros::NodeHandle  nh;
 my_project_msgs::Sensors msg;
 
 ros::Publisher chatter("/sensors_values", &msg);
-ros::Subscriber<ackermann_msgs::AckermannDriveStamped> sub("/ackermann_cmd", &cmdVel_to_pwm );
+ros::Subscriber<my_project_msgs::Command_ackermann> sub("/cmd_car", &cmdVel_to_pwm);
 
 Motor motor(18,19,4,27);
 Encoder encoder;
@@ -53,7 +53,7 @@ Encoder encoder;
 int r = 0;
 int pwm = 0;
 float u = 0;
-float angle = 100.0;
+float angle = 89.0;
 float error = 0;
 
 //bateria antiga
@@ -128,7 +128,7 @@ void loop() {
     float enc_as5600_L = encoder.getRPM_AS5600(as5600_0);
     float enc_as5600_R = encoder.getRPM_AS5600(as5600_1);
     float rpm = encoder.getRPM_MotorEixo(intervalo);
-    float theta_dot = mpu6050.angularVelocityZ; 
+    float angularVelocity = mpu6050.angularVelocityZ; 
 
     // offset stop state
     if(abs(enc_as5600_L) < 2.0){
@@ -147,12 +147,11 @@ void loop() {
      msg.encoder_eixo = rpm;
      msg.encoder_as5600_L = enc_as5600_L;
      msg.encoder_as5600_R = enc_as5600_R; 
-     msg.Yaw = theta_dot;
-     msg.servo_angle = angle-100;
+     msg.angularVelocity = angularVelocity;
      chatter.publish(&msg);
 
       // Debug info
-      Serial.printf("r:%d RPM:%.2f u:%.2f\n",r, rpm, angle);
+//      Serial.printf("r:%d RPM:%.2f u:%.2f\n",r, rpm, angle);
 //    Serial.printf("RPM:%.2f  AS5600_L: %.2f  AS5600_R: %.2f  Z_angle: %.2f\n", rpm, enc_as5600_L, enc_as5600_R, mpu6050.angularVelocityZ);
 //     Serial.printf("r:%.2f  x_hat:%.2f y: %.2f\n", Controller.r(0), states(0), rpm);
      motor.motorSpeed(u, FORWARD); // Min = 150 || Max = 230
@@ -197,21 +196,17 @@ void setupWiFi(){
 
 }
 
- void cmdVel_to_pwm(const ackermann_msgs::AckermannDriveStamped &velocity_msg){
- 
-     float motor_speed = velocity_msg.drive.speed;
-     float steering_angle = velocity_msg.drive.steering_angle;
+ void cmdVel_to_pwm(const my_project_msgs::Command_ackermann &cmd){
+
+     float motor_speed = cmd.rpm;
+     float steering_angle = cmd.servo_angle;
 
      // RPM setpoint
-     r = 1600*abs(motor_speed); 
+     r = motor_speed; 
+
+     angle = steering_angle;
      
-     angle = 105 -  93*steering_angle ;
-     angle = constrain(angle, 60, 150);
+//     Serial.println(angle);
 
-//     if(motor_speed > 0){ motor.motorSpeed(u, FORWARD);}
-//     else if(motor_speed < 0){ motor.motorSpeed(u, BACKWARD);}
-//     else if(motor_speed == 0){motor.motorSpeed(0, STOP);}
-
-//     Serial.print(pwm);Serial.print(" / ");Serial.println(angle);
 
  }

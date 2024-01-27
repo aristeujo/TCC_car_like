@@ -1,14 +1,16 @@
 #include "ros/ros.h"
+#include <ackermann_msgs/AckermannDriveStamped.h>
 #include <tf/transform_broadcaster.h>
 #include "my_project_msgs/Sensors.h"
+#include "my_project_msgs/Command_ackermann.h"
 #include <nav_msgs/Odometry.h>
 #include <math.h>
 
 class Sensors_listener
 {
 private:
-    //ROS parameters
-    double wheelbase_ = 0.160143;
+    //ROS parameters in m
+    double wheelbase_ = 0.248;
     double wheelRadius_ = 0.0335;
 
     const char *topic_sub_ = "/sensors_values";
@@ -17,10 +19,18 @@ private:
     float rpm_as5600_L_;
     float angularVelocityZ_;
 
+    // ackermann msgs commands
+    double linear_speed_ = 0.0, steering_angle_ = 0.0, last_steering_angle = 0.0;
+
+    // converted ackermann commands
+    double rpm = 0.0;
+    double angle_servo = 89;
+
+    // Wheel velocities in mm/s
     double vL_, vR_;
 
     //odom state
-    double x_,y_, yaw_, yaw__1, yaw_est_, theta_, theta_dot_;
+    double x_,y_, yaw_, yaw__1, yaw_est_, theta_, theta_dot_, current_angular_velocity;
 
     //estimated integral
     double integral_approx_ = 0.0, i_ = 1.0;
@@ -29,12 +39,16 @@ private:
     ros::Publisher odom_pub_;
     tf::TransformBroadcaster odom_broadcaster_;
     ros::Time current_time_, last_time_;
+    ros::Subscriber car_commands_;
+    ros::Publisher car_commands_pub_;
 
 public:
     Sensors_listener(ros::NodeHandle *nh);
     void sensorsCallback(const my_project_msgs::Sensors &msg);
+    void ackermannCallback(const ackermann_msgs::AckermannDriveStamped &msg);
     double estimated_integral(double state_dot);
     void odometry_calc();
+    void saturate(double* input, double lowerLimit, double upperLimit);
 };
 
 Sensors_listener::Sensors_listener(ros::NodeHandle *nh)
@@ -43,6 +57,8 @@ Sensors_listener::Sensors_listener(ros::NodeHandle *nh)
     last_time_ = ros::Time::now();
     sub_sensors_ = nh->subscribe(topic_sub_, 100, &Sensors_listener::sensorsCallback, this);
     odom_pub_ = nh->advertise<nav_msgs::Odometry>("odom", 100);
+    car_commands_ = nh->subscribe("/ackermann_cmd", 100, &Sensors_listener::ackermannCallback, this);
+    car_commands_pub_ = nh->advertise<my_project_msgs::Command_ackermann>("/cmd_car", 100);
     
 }
 
@@ -76,39 +92,45 @@ void Sensors_listener::odometry_calc(){
     double dt = 0.1;
 
     // Convert rpm to m/s
-    vL_ = (2*M_PI*rpm_as5600_L_*wheelRadius_)/60;;
+    vL_ = (2*M_PI*rpm_as5600_L_*wheelRadius_)/60;
     vR_ = (2*M_PI*rpm_as5600_R_*wheelRadius_)/60;
 
     double current_speed = (vL_+vR_)/2;
-    
-    // double x_dot = current_speed * cos(theta_);
-    // double y_dot = current_speed * sin(theta_);
 
     double x_dot = current_speed * cos(yaw_);
     double y_dot = current_speed * sin(yaw_);
 
-    // odometry estimation
+    // odometry estimation  
     x_ += x_dot*dt;
     y_ += y_dot*dt;
 
-    theta_ += (vR_ - vL_)/wheelbase_;
+    if(steering_angle_ != 0){
+        current_angular_velocity = current_speed * tan(steering_angle_) / wheelbase_;
+        theta_ += current_angular_velocity*dt;
+    }
     
     yaw__1 += angularVelocityZ_*dt;
     yaw_est_ = estimated_integral(angularVelocityZ_);
 
     // combinated Yaw
-    yaw_ = yaw__1*0.4 + yaw_est_*0.6;
+
+    if(steering_angle_ != 0){
+         yaw_ = yaw__1*0.7261 + theta_*0.2739;
+    }
+    else{
+        yaw_ = yaw__1;
+    }
+
 
     if(yaw_ > M_PI) {yaw_ -= 2*M_PI;}
     else if(yaw_ < -M_PI) {yaw_ += 2*M_PI;}    
 
     // abs(theta_) >= 2*M_PI ? 0.0 : theta_;
-    // if(theta_ > M_PI) {theta_ -= 2*M_PI;}
-    // else if(theta_ < -M_PI) {theta_ += 2*M_PI;}
+    if(theta_ > M_PI) {theta_ -= 2*M_PI;}
+    else if(theta_ < -M_PI) {theta_ += 2*M_PI;}
 
-    // theta_dot_ = (current_speed * tan(theta_)) / wheelbase_;
-
-    ROS_INFO("X: %.2f || Y: %.2f || Yaw: %.2f  || X_dot: %.2f || Y_dot: %.2f", x_, y_, yaw_, x_dot, y_dot);
+    ROS_INFO("Theta: %.2f  ||    Yaw_mpu: %.2f    || Yaw_comb: %.2f", theta_, yaw_est_, yaw_);
+    // ROS_INFO("X: %.2f || Y: %.2f || Yaw: %.2f  || X_dot: %.2f || Y_dot: %.2f", x_, y_, yaw_, x_dot, y_dot);
     // ROS_INFO("X: %.2f || Y: %.2f || Theta: %.4f || Yaw_MPU: %.4f || Yaw_est: %.4f", x_, y_, yaw_, yaw__1, yaw_est_);
 
     // Create Quartenion from Yaw angle
@@ -164,13 +186,49 @@ void Sensors_listener::sensorsCallback(const my_project_msgs::Sensors &msg){
     this->rpm_eixo_ = msg.encoder_eixo;
     this->rpm_as5600_L_ = msg.encoder_as5600_L;
     this->rpm_as5600_R_ = msg.encoder_as5600_R;
-    this->angularVelocityZ_ = msg.Yaw;
+    this->angularVelocityZ_ = msg.angularVelocity;
 
     odometry_calc();
 
     // ROS_INFO("Eixo:%.2f AS5600_L:%.2f AS5600_R:%.2f", this->rpm_eixo_, this->rpm_as5600_L_, this->rpm_as5600_R_);
 }
 
+// ALPHA = 5.5
+
+void Sensors_listener::ackermannCallback(const ackermann_msgs::AckermannDriveStamped &msg){
+
+    linear_speed_ = msg.drive.speed;
+    steering_angle_ = msg.drive.steering_angle;
+
+    // ROS_INFO("linear_vel:%.2f steering_angle:%.2f", linear_speed_, steering_angle_);
+
+    // RPM setpoint
+
+    // if(yaw__1 <= -1.4 && yaw__1 > -3.14) {
+    //     rpm = 0;
+    // }
+
+    // else{
+    rpm = (60/2*M_PI*wheelRadius_)*(linear_speed_)*100;
+    // }
+        
+     
+    angle_servo = 89 - (180/M_PI)*steering_angle_;
+    saturate(&angle_servo, 69, 109);
+
+    my_project_msgs::Command_ackermann msg_cmd;
+    msg_cmd.rpm = rpm;
+    msg_cmd.servo_angle = angle_servo;
+
+    car_commands_pub_.publish(msg_cmd);
+
+    // ROS_INFO("rpm:%.2f angle_servo:%.2f", rpm, angle_servo);
+}
+
+void Sensors_listener::saturate(double* input, double lowerLimit, double upperLimit){
+  if(*input < lowerLimit) *input = lowerLimit;
+  if(*input > upperLimit) *input = upperLimit;
+}
 
 int main(int argc,char **argv){
     ros::init(argc, argv, "sensors_node");
