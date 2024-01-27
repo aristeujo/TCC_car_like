@@ -24,18 +24,18 @@ void cmdVel_to_pwm( const ackermann_msgs::AckermannDriveStamped &velocity_msg);
 #define ENC_IN_B 13 // Fio Amarelo
 #define potPin  34
 
- IPAddress server(192, 168, 0, 30); //IP do/ desktop da minha casa
+// IPAddress server(192, 168, 0, 30); //IP do/ desktop da minha casa
 
 // IPAddress server(192, 168, 15, 6); //IP do/ desktop do Graest
 
-//IPAddress server(192,169,141,72); //IP do /notebook do STEM
+IPAddress server(192,169,141,72); //IP do /notebook do STEM
 
 uint16_t serverPort = 11411;
- const char*  ssid = "Seixas_Net";
- const char*  password = "Mayum647";//
+//const char*  ssid = "Seixas_Net";
+//const char*  password = "Mayum647";
 
-//const char*  ssid = "STEM_ALUNOS";
-//const char*  password = "1n0v@.st3m!!";
+const char*  ssid = "STEMLABNET";
+const char*  password = "1n0v@t3ch.5t3m@#!";
 
 //const char*  ssid = "NucleoRobotica2g";
 //const char*  password = "!gra.3st#";
@@ -53,7 +53,7 @@ Encoder encoder;
 int r = 0;
 int pwm = 0;
 float u = 0;
-float angle = 0.0;
+float angle = 100.0;
 float error = 0;
 
 //bateria antiga
@@ -111,7 +111,7 @@ void setup() {
 }
 
 void loop() {
-   int r = map(analogRead(potPin), 0, 4095, 0, 280);
+//   int r = map(analogRead(potPin), 0, 4095, 0, 280);
 
   // RPM setpoint
 //  int r = 210;
@@ -128,7 +128,7 @@ void loop() {
     float enc_as5600_L = encoder.getRPM_AS5600(as5600_0);
     float enc_as5600_R = encoder.getRPM_AS5600(as5600_1);
     float rpm = encoder.getRPM_MotorEixo(intervalo);
-//    float theta_dot = mpu6050.angularVelocityZ; 
+    float theta_dot = mpu6050.angularVelocityZ; 
 
     // offset stop state
     if(abs(enc_as5600_L) < 2.0){
@@ -152,15 +152,17 @@ void loop() {
      chatter.publish(&msg);
 
       // Debug info
-      Serial.printf("r:%d RPM:%.2f u:%.2f\n",r, rpm, u);
+      Serial.printf("r:%d RPM:%.2f u:%.2f\n",r, rpm, angle);
 //    Serial.printf("RPM:%.2f  AS5600_L: %.2f  AS5600_R: %.2f  Z_angle: %.2f\n", rpm, enc_as5600_L, enc_as5600_R, mpu6050.angularVelocityZ);
 //     Serial.printf("r:%.2f  x_hat:%.2f y: %.2f\n", Controller.r(0), states(0), rpm);
      motor.motorSpeed(u, FORWARD); // Min = 150 || Max = 230
-    
-//     nh.spinOnce();
+     motor.setAngle(angle);
+     
      timer = millis();
 //     Serial.println(timer - temp);
   }
+
+  nh.spinOnce();
   
 //  motor.motorSpeed(u, FORWARD); // Min = 150 || Max = 230
 //  motor.setAngle(130);
@@ -201,16 +203,14 @@ void setupWiFi(){
      float steering_angle = velocity_msg.drive.steering_angle;
 
      // RPM setpoint
-     r = 1400*abs(motor_speed); 
+     r = 1600*abs(motor_speed); 
      
-     angle = 100 -  93*steering_angle ;
-     angle = constrain(angle, 50, 150);
+     angle = 105 -  93*steering_angle ;
+     angle = constrain(angle, 60, 150);
 
-     if(motor_speed > 0){ motor.motorSpeed(u, FORWARD);}
-     else if(motor_speed < 0){ motor.motorSpeed(u, BACKWARD);}
-     else if(motor_speed == 0){motor.motorSpeed(0, STOP);}
-
-     motor.setAngle(angle);
+//     if(motor_speed > 0){ motor.motorSpeed(u, FORWARD);}
+//     else if(motor_speed < 0){ motor.motorSpeed(u, BACKWARD);}
+//     else if(motor_speed == 0){motor.motorSpeed(0, STOP);}
 
 //     Serial.print(pwm);Serial.print(" / ");Serial.println(angle);
 

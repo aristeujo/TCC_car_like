@@ -20,7 +20,10 @@ private:
     double vL_, vR_;
 
     //odom state
-    double x_, y_, yaw_, theta_, theta_dot_;
+    double x_,y_, yaw_, yaw__1, yaw_est_, theta_, theta_dot_;
+
+    //estimated integral
+    double integral_approx_ = 0.0, i_ = 1.0;
 
     ros::Subscriber sub_sensors_;
     ros::Publisher odom_pub_;
@@ -30,6 +33,7 @@ private:
 public:
     Sensors_listener(ros::NodeHandle *nh);
     void sensorsCallback(const my_project_msgs::Sensors &msg);
+    double estimated_integral(double state_dot);
     void odometry_calc();
 };
 
@@ -41,6 +45,28 @@ Sensors_listener::Sensors_listener(ros::NodeHandle *nh)
     odom_pub_ = nh->advertise<nav_msgs::Odometry>("odom", 100);
     
 }
+
+double Sensors_listener::estimated_integral(double state_dot){
+
+    if(i_ == 1) {
+      integral_approx_ = integral_approx_ + state_dot; 
+      i_ = 2;
+    } 
+    if(i_ == 2){
+      integral_approx_ = integral_approx_ + 4 * state_dot;
+      i_ = 3;
+    }
+        
+    else { 
+      integral_approx_ = integral_approx_ + 2 * state_dot;
+      i_ = 2;
+  }
+
+  double h = 0.1;
+  double integral_est = (h / 3) * integral_approx_;
+
+return integral_est;
+};
 
 void Sensors_listener::odometry_calc(){
 
@@ -64,18 +90,26 @@ void Sensors_listener::odometry_calc(){
     // odometry estimation
     x_ += x_dot*dt;
     y_ += y_dot*dt;
+
     theta_ += (vR_ - vL_)/wheelbase_;
     
-    yaw_ += angularVelocityZ_*dt;
+    yaw__1 += angularVelocityZ_*dt;
+    yaw_est_ = estimated_integral(angularVelocityZ_);
+
+    // combinated Yaw
+    yaw_ = yaw__1*0.4 + yaw_est_*0.6;
+
+    if(yaw_ > M_PI) {yaw_ -= 2*M_PI;}
+    else if(yaw_ < -M_PI) {yaw_ += 2*M_PI;}    
 
     // abs(theta_) >= 2*M_PI ? 0.0 : theta_;
+    // if(theta_ > M_PI) {theta_ -= 2*M_PI;}
+    // else if(theta_ < -M_PI) {theta_ += 2*M_PI;}
 
-    if(theta_ > M_PI) {theta_ -= 2*M_PI;}
-    else if(theta_ < -M_PI) {theta_ += 2*M_PI;}
+    // theta_dot_ = (current_speed * tan(theta_)) / wheelbase_;
 
-    theta_dot_ = (current_speed * tan(theta_)) / wheelbase_;
-
-    ROS_INFO("X: %.2f || Y: %.2f || Theta: %.2f || Yaw_MPU: %.2f", x_, y_, theta_, yaw_);
+    ROS_INFO("X: %.2f || Y: %.2f || Yaw: %.2f  || X_dot: %.2f || Y_dot: %.2f", x_, y_, yaw_, x_dot, y_dot);
+    // ROS_INFO("X: %.2f || Y: %.2f || Theta: %.4f || Yaw_MPU: %.4f || Yaw_est: %.4f", x_, y_, yaw_, yaw__1, yaw_est_);
 
     // Create Quartenion from Yaw angle
     geometry_msgs::Quaternion odom_quat = tf::createQuaternionMsgFromYaw(yaw_);
@@ -114,7 +148,14 @@ void Sensors_listener::odometry_calc(){
     // Publish the odometry message
     odom_pub_.publish(odom);
 
-    last_time_ = current_time_;
+    // last_time_ = current_time_;
+
+    // last_time_ = ros::Time::now();
+
+    // time in seconds
+    // double delta_time_  = (last_time_ - current_time_).toSec();
+
+    // ROS_INFO("Tempo: %.6f", delta_time_);
 
 }
 
@@ -124,6 +165,8 @@ void Sensors_listener::sensorsCallback(const my_project_msgs::Sensors &msg){
     this->rpm_as5600_L_ = msg.encoder_as5600_L;
     this->rpm_as5600_R_ = msg.encoder_as5600_R;
     this->angularVelocityZ_ = msg.Yaw;
+
+    odometry_calc();
 
     // ROS_INFO("Eixo:%.2f AS5600_L:%.2f AS5600_R:%.2f", this->rpm_eixo_, this->rpm_as5600_L_, this->rpm_as5600_R_);
 }
@@ -135,15 +178,7 @@ int main(int argc,char **argv){
 
     Sensors_listener sensors = Sensors_listener(&nh);
 
-    ros::Rate r(10.0);
-    while(nh.ok()){
-
-        ros::spinOnce();
-
-        sensors.odometry_calc();
-
-        r.sleep();
-    }
+    ros::spin();
 
     return 0;
 }
