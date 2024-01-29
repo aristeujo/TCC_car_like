@@ -30,7 +30,7 @@ private:
     double vL_, vR_;
 
     //odom state
-    double x_,y_, yaw_, yaw__1, yaw_est_, theta_, theta_dot_, current_angular_velocity;
+    double x_,y_, yaw_, yaw_mpu_, yaw_est_, theta_, theta_dot_, current_angular_velocity;
 
     //estimated integral
     double integral_approx_ = 0.0, i_ = 1.0;
@@ -49,6 +49,7 @@ public:
     double estimated_integral(double state_dot);
     void odometry_calc();
     void saturate(double* input, double lowerLimit, double upperLimit);
+    void range(double *input);
 };
 
 Sensors_listener::Sensors_listener(ros::NodeHandle *nh)
@@ -58,37 +59,13 @@ Sensors_listener::Sensors_listener(ros::NodeHandle *nh)
     sub_sensors_ = nh->subscribe(topic_sub_, 100, &Sensors_listener::sensorsCallback, this);
     odom_pub_ = nh->advertise<nav_msgs::Odometry>("odom", 100);
     car_commands_ = nh->subscribe("/ackermann_cmd", 100, &Sensors_listener::ackermannCallback, this);
-    car_commands_pub_ = nh->advertise<my_project_msgs::Command_ackermann>("/cmd_car", 100);
-    
+    car_commands_pub_ = nh->advertise<my_project_msgs::Command_ackermann>("/cmd_car", 100); 
 }
-
-double Sensors_listener::estimated_integral(double state_dot){
-
-    if(i_ == 1) {
-      integral_approx_ = integral_approx_ + state_dot; 
-      i_ = 2;
-    } 
-    if(i_ == 2){
-      integral_approx_ = integral_approx_ + 4 * state_dot;
-      i_ = 3;
-    }
-        
-    else { 
-      integral_approx_ = integral_approx_ + 2 * state_dot;
-      i_ = 2;
-  }
-
-  double h = 0.1;
-  double integral_est = (h / 3) * integral_approx_;
-
-return integral_est;
-};
 
 void Sensors_listener::odometry_calc(){
 
     // calc elapsed time
     current_time_ = ros::Time::now();
-    // double dt = (current_time_ - last_time_).toSec();
     double dt = 0.1;
 
     // Convert rpm to m/s
@@ -109,25 +86,28 @@ void Sensors_listener::odometry_calc(){
         theta_ += current_angular_velocity*dt;
     }
     
-    yaw__1 += angularVelocityZ_*dt;
-    yaw_est_ = estimated_integral(angularVelocityZ_);
+    yaw_mpu_ += angularVelocityZ_*dt;
+    // yaw_est_ = estimated_integral(angularVelocityZ_);
 
     // combinated Yaw
 
     if(steering_angle_ != 0){
-         yaw_ = yaw__1*0.7261 + theta_*0.2739;
+        // yaw_ = yaw__1*0.7261 + theta_*0.2739;
+        yaw_ = yaw_mpu_ + 0.2739*(theta_ - yaw_mpu_);
     }
     else{
-        yaw_ = yaw__1;
+        yaw_ = yaw_mpu_;
     }
 
-
-    if(yaw_ > M_PI) {yaw_ -= 2*M_PI;}
-    else if(yaw_ < -M_PI) {yaw_ += 2*M_PI;}    
+    // if(yaw_ > M_PI) {yaw_ -= 2*M_PI;}
+    // else if(yaw_ < -M_PI) {yaw_ += 2*M_PI;}    
 
     // abs(theta_) >= 2*M_PI ? 0.0 : theta_;
-    if(theta_ > M_PI) {theta_ -= 2*M_PI;}
-    else if(theta_ < -M_PI) {theta_ += 2*M_PI;}
+    // if(theta_ > M_PI) {theta_ -= 2*M_PI;}
+    // else if(theta_ < -M_PI) {theta_ += 2*M_PI;}
+
+    range(&yaw_);
+    range(&theta_);
 
     ROS_INFO("Theta: %.2f  ||    Yaw_mpu: %.2f    || Yaw_comb: %.2f", theta_, yaw_est_, yaw_);
     // ROS_INFO("X: %.2f || Y: %.2f || Yaw: %.2f  || X_dot: %.2f || Y_dot: %.2f", x_, y_, yaw_, x_dot, y_dot);
@@ -171,12 +151,9 @@ void Sensors_listener::odometry_calc(){
     odom_pub_.publish(odom);
 
     // last_time_ = current_time_;
-
     // last_time_ = ros::Time::now();
-
     // time in seconds
     // double delta_time_  = (last_time_ - current_time_).toSec();
-
     // ROS_INFO("Tempo: %.6f", delta_time_);
 
 }
@@ -229,6 +206,32 @@ void Sensors_listener::saturate(double* input, double lowerLimit, double upperLi
   if(*input < lowerLimit) *input = lowerLimit;
   if(*input > upperLimit) *input = upperLimit;
 }
+
+void Sensors_listener::range(double *input){
+    if(*input > M_PI) {*input -= 2*M_PI;}
+    if(*input < -M_PI) {*input += 2*M_PI;}    
+}
+
+double Sensors_listener::estimated_integral(double state_dot){
+
+    if(i_ == 1) {
+        integral_approx_ = integral_approx_ + state_dot; 
+        i_ = 2;
+    } 
+    if(i_ == 2){
+        integral_approx_ = integral_approx_ + 4 * state_dot;
+        i_ = 3;
+    }
+    else { 
+        integral_approx_ = integral_approx_ + 2 * state_dot;
+        i_ = 2;
+    }
+
+    double h = 0.1;
+    double integral_est = (h / 3) * integral_approx_;
+
+    return integral_est;
+};
 
 int main(int argc,char **argv){
     ros::init(argc, argv, "sensors_node");

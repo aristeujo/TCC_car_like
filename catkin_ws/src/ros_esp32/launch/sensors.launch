@@ -1,0 +1,4 @@
+<launch>
+    <node name="sensors_node" pkg="ros_esp32" type="sensors_node" output="screen"/>
+    <node name="rviz" pkg="rviz" type="rviz"/>
+</launch>

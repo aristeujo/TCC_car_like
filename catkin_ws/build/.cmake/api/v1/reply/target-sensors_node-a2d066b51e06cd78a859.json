@@ -2,7 +2,7 @@
 	"artifacts" : 
 	[
 		{
-			"path" : "/home/aristeujo/TCC/catkin_ws/devel/lib/ros_esp32/sensors_node"
+			"path" : "/home/aristeujo/Documentos/TCC_codes/catkin_ws/devel/lib/ros_esp32/sensors_node"
 		}
 	],
 	"backtrace" : 1,
@@ -162,7 +162,7 @@
 			[
 				{
 					"backtrace" : 19,
-					"path" : "/home/aristeujo/TCC/catkin_ws/devel/include"
+					"path" : "/home/aristeujo/Documentos/TCC_codes/catkin_ws/devel/include"
 				},
 				{
 					"backtrace" : 19,

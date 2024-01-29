@@ -43,7 +43,6 @@ const char*  password = "1n0v@t3ch.5t3m@#!";
 
 ros::NodeHandle  nh;
 my_project_msgs::Sensors msg;
-
 ros::Publisher chatter("/sensors_values", &msg);
 ros::Subscriber<my_project_msgs::Command_ackermann> sub("/cmd_car", &cmdVel_to_pwm);
 
@@ -81,10 +80,10 @@ void setup() {
 
 //  delay(2000);
   
-   nh.getHardware()->setConnection(server, serverPort);
-   nh.initNode();
-   nh.advertise(chatter);
-   nh.subscribe(sub);
+  nh.getHardware()->setConnection(server, serverPort);
+  nh.initNode();
+  nh.advertise(chatter);
+  nh.subscribe(sub);
   
   motor.initMotor();
 
@@ -111,10 +110,7 @@ void setup() {
 }
 
 void loop() {
-//   int r = map(analogRead(potPin), 0, 4095, 0, 280);
-
-  // RPM setpoint
-//  int r = 210;
+  // int r = map(analogRead(potPin), 0, 4095, 0, 280);
 
   // update MPU6050 communication
   mpu6050.update_mpu();
@@ -206,7 +202,4 @@ void setupWiFi(){
 
      angle = steering_angle;
      
-//     Serial.println(angle);
-
-
  }
