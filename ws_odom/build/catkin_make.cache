@@ -1,2 +1,2 @@
 odom_test
--DCATKIN_DEVEL_PREFIX=/home/aristeujo/Documentos/TCC_codes/ws_odom/devel -DCMAKE_INSTALL_PREFIX=/home/aristeujo/Documentos/TCC_codes/ws_odom/install -G Unix Makefiles
+-DCATKIN_DEVEL_PREFIX=/home/aristeujo/TCC/ws_odom/devel -DCMAKE_INSTALL_PREFIX=/home/aristeujo/TCC/ws_odom/install -G Unix Makefiles

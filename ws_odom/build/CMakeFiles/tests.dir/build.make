@@ -43,10 +43,10 @@ RM = /usr/bin/cmake -E remove -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/aristeujo/Documentos/TCC_codes/ws_odom/src
+CMAKE_SOURCE_DIR = /home/aristeujo/TCC/ws_odom/src
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/aristeujo/Documentos/TCC_codes/ws_odom/build
+CMAKE_BINARY_DIR = /home/aristeujo/TCC/ws_odom/build
 
 # Utility rule file for tests.
 
@@ -67,6 +67,6 @@ CMakeFiles/tests.dir/clean:
 .PHONY : CMakeFiles/tests.dir/clean
 
 CMakeFiles/tests.dir/depend:
-	cd /home/aristeujo/Documentos/TCC_codes/ws_odom/build && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/aristeujo/Documentos/TCC_codes/ws_odom/src /home/aristeujo/Documentos/TCC_codes/ws_odom/src /home/aristeujo/Documentos/TCC_codes/ws_odom/build /home/aristeujo/Documentos/TCC_codes/ws_odom/build /home/aristeujo/Documentos/TCC_codes/ws_odom/build/CMakeFiles/tests.dir/DependInfo.cmake --color=$(COLOR)
+	cd /home/aristeujo/TCC/ws_odom/build && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/aristeujo/TCC/ws_odom/src /home/aristeujo/TCC/ws_odom/src /home/aristeujo/TCC/ws_odom/build /home/aristeujo/TCC/ws_odom/build /home/aristeujo/TCC/ws_odom/build/CMakeFiles/tests.dir/DependInfo.cmake --color=$(COLOR)
 .PHONY : CMakeFiles/tests.dir/depend
 

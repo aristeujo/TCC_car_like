@@ -19,6 +19,9 @@ private:
     float rpm_as5600_L_;
     float angularVelocityZ_;
 
+    // path coeficients
+    double A = -1, B = 1, C = 0;
+
     // ackermann msgs commands
     double linear_speed_ = 0.0, steering_angle_ = 0.0, last_steering_angle = 0.0;
 
@@ -26,14 +29,21 @@ private:
     double rpm = 0.0;
     double angle_servo = 89;
 
+    // controller gains
+    // double k[2] = {-82.3535, -147.7895};
+    double k[2] = {-6.7804, -7.0238};
+    
+
     // Wheel velocities in mm/s
     double vL_, vR_;
 
     //odom state
-    double x_,y_, yaw_, yaw_mpu_, yaw_est_, theta_, theta_dot_, current_angular_velocity;
+    double x_ = 1, y_ = 0, yaw_ = M_PI/2, yaw_mpu_, yaw_est_, theta_, theta_dot_, current_angular_velocity;
 
     //estimated integral
     double integral_approx_ = 0.0, i_ = 1.0;
+
+    int flag  = 0;
 
     ros::Subscriber sub_sensors_;
     ros::Publisher odom_pub_;
@@ -41,15 +51,20 @@ private:
     ros::Time current_time_, last_time_;
     ros::Subscriber car_commands_;
     ros::Publisher car_commands_pub_;
+    ros::Timer timer;
 
 public:
     Sensors_listener(ros::NodeHandle *nh);
     void sensorsCallback(const my_project_msgs::Sensors &msg);
     void ackermannCallback(const ackermann_msgs::AckermannDriveStamped &msg);
+    void timerCallback(const ros::TimerEvent &event);
     double estimated_integral(double state_dot);
     void odometry_calc();
+    void sendAckerCommands(double linear_speed, double steering_angle);
     void saturate(double* input, double lowerLimit, double upperLimit);
     void range(double *input);
+    double calcDistance(double A, double B, double C, double x0, double y0);
+    void controller(double rpm);
 };
 
 Sensors_listener::Sensors_listener(ros::NodeHandle *nh)
@@ -60,6 +75,7 @@ Sensors_listener::Sensors_listener(ros::NodeHandle *nh)
     odom_pub_ = nh->advertise<nav_msgs::Odometry>("odom", 100);
     car_commands_ = nh->subscribe("/ackermann_cmd", 100, &Sensors_listener::ackermannCallback, this);
     car_commands_pub_ = nh->advertise<my_project_msgs::Command_ackermann>("/cmd_car", 100); 
+    timer = nh->createTimer(ros::Duration(10), &Sensors_listener::timerCallback, this);
 }
 
 void Sensors_listener::odometry_calc(){
@@ -92,26 +108,29 @@ void Sensors_listener::odometry_calc(){
     // combinated Yaw
 
     if(steering_angle_ != 0){
-        // yaw_ = yaw__1*0.7261 + theta_*0.2739;
-        yaw_ = yaw_mpu_ + 0.2739*(theta_ - yaw_mpu_);
+        yaw_ = yaw_mpu_*0.7261 + theta_*0.2739;
+        // yaw_ = yaw_mpu_ + 0.2739*(theta_ - yaw_mpu_);
     }
     else{
         yaw_ = yaw_mpu_;
     }
 
-    // if(yaw_ > M_PI) {yaw_ -= 2*M_PI;}
-    // else if(yaw_ < -M_PI) {yaw_ += 2*M_PI;}    
+    if(yaw_ > M_PI) {yaw_ -= 2*M_PI;}
+    else if(yaw_ < -M_PI) {yaw_ += 2*M_PI;}    
 
     // abs(theta_) >= 2*M_PI ? 0.0 : theta_;
-    // if(theta_ > M_PI) {theta_ -= 2*M_PI;}
-    // else if(theta_ < -M_PI) {theta_ += 2*M_PI;}
+    if(theta_ > M_PI) {theta_ -= 2*M_PI;}
+    else if(theta_ < -M_PI) {theta_ += 2*M_PI;}
 
-    range(&yaw_);
-    range(&theta_);
+    // range(&yaw_);
+    // range(&theta_);
 
-    ROS_INFO("Theta: %.2f  ||    Yaw_mpu: %.2f    || Yaw_comb: %.2f", theta_, yaw_est_, yaw_);
-    // ROS_INFO("X: %.2f || Y: %.2f || Yaw: %.2f  || X_dot: %.2f || Y_dot: %.2f", x_, y_, yaw_, x_dot, y_dot);
+    // ROS_INFO("Theta: %.2f  ||    Yaw_mpu: %.2f    || Yaw_comb: %.2f", theta_, yaw_est_, yaw_);
+    ROS_INFO("X: %.2f || Y: %.2f || Yaw: %.2f  || X_dot: %.2f || Y_dot: %.2f", x_, y_, yaw_, x_dot, y_dot);
     // ROS_INFO("X: %.2f || Y: %.2f || Theta: %.4f || Yaw_MPU: %.4f || Yaw_est: %.4f", x_, y_, yaw_, yaw__1, yaw_est_);
+
+
+    if(flag == 0) controller(220.0);
 
     // Create Quartenion from Yaw angle
     geometry_msgs::Quaternion odom_quat = tf::createQuaternionMsgFromYaw(yaw_);
@@ -149,13 +168,48 @@ void Sensors_listener::odometry_calc(){
 
     // Publish the odometry message
     odom_pub_.publish(odom);
+}
 
-    // last_time_ = current_time_;
-    // last_time_ = ros::Time::now();
-    // time in seconds
-    // double delta_time_  = (last_time_ - current_time_).toSec();
-    // ROS_INFO("Tempo: %.6f", delta_time_);
+// ALPHA = 5.5
 
+void Sensors_listener::saturate(double* input, double lowerLimit, double upperLimit){
+  if(*input < lowerLimit) *input = lowerLimit;
+  if(*input > upperLimit) *input = upperLimit;
+}
+
+void Sensors_listener::range(double *input){
+    if(*input > M_PI) {*input -= 2*M_PI;}
+    if(*input < -M_PI) {*input += 2*M_PI;}    
+}
+
+double Sensors_listener::calcDistance(double A, double B, double C, double x0, double y0){
+    double distancia = abs(A * x0 + B * y0 + C) / sqrt(A*A + B*B);
+
+    return distancia;
+}
+
+void Sensors_listener::controller(double rpm){
+    double e = calcDistance(A, B, C, x_, y_);
+    double psi = yaw_ - atan(1);
+
+    if(y_ < x_) e = (-1)*e;
+
+    // control signal
+    double u = k[0]*e + k[1]*psi;
+    saturate(&u, -0.3491, 0.3491);
+
+    angle_servo = 89 - (180/M_PI)*u;
+
+    // send r and u to ESP32
+    sendAckerCommands(rpm, angle_servo);
+}
+
+void Sensors_listener::sendAckerCommands(double linear_speed, double steering_angle){
+    my_project_msgs::Command_ackermann msg_cmd;
+    msg_cmd.rpm = linear_speed;
+    msg_cmd.servo_angle = steering_angle;
+
+    car_commands_pub_.publish(msg_cmd);
 }
 
 void Sensors_listener::sensorsCallback(const my_project_msgs::Sensors &msg){
@@ -169,8 +223,6 @@ void Sensors_listener::sensorsCallback(const my_project_msgs::Sensors &msg){
 
     // ROS_INFO("Eixo:%.2f AS5600_L:%.2f AS5600_R:%.2f", this->rpm_eixo_, this->rpm_as5600_L_, this->rpm_as5600_R_);
 }
-
-// ALPHA = 5.5
 
 void Sensors_listener::ackermannCallback(const ackermann_msgs::AckermannDriveStamped &msg){
 
@@ -193,24 +245,18 @@ void Sensors_listener::ackermannCallback(const ackermann_msgs::AckermannDriveSta
     angle_servo = 89 - (180/M_PI)*steering_angle_;
     saturate(&angle_servo, 69, 109);
 
-    my_project_msgs::Command_ackermann msg_cmd;
-    msg_cmd.rpm = rpm;
-    msg_cmd.servo_angle = angle_servo;
-
-    car_commands_pub_.publish(msg_cmd);
+    sendAckerCommands(rpm, angle_servo);
 
     // ROS_INFO("rpm:%.2f angle_servo:%.2f", rpm, angle_servo);
 }
 
-void Sensors_listener::saturate(double* input, double lowerLimit, double upperLimit){
-  if(*input < lowerLimit) *input = lowerLimit;
-  if(*input > upperLimit) *input = upperLimit;
+void Sensors_listener::timerCallback(const ros::TimerEvent &event){
+
+    sendAckerCommands(0.0, 89.0);
+    flag = 2;
+
 }
 
-void Sensors_listener::range(double *input){
-    if(*input > M_PI) {*input -= 2*M_PI;}
-    if(*input < -M_PI) {*input += 2*M_PI;}    
-}
 
 double Sensors_listener::estimated_integral(double state_dot){
 

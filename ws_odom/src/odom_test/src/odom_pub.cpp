@@ -9,8 +9,8 @@ int main(int argc, char** argv){
   ros::Publisher odom_pub = n.advertise<nav_msgs::Odometry>("odom", 50);
   tf::TransformBroadcaster odom_broadcaster;
 
-  double x = 0.0;
-  double y = 0.0;
+  double x = 1.0;
+  double y = 2.0;
   double th = 0.0;
 
   double vx = 0.1;
@@ -21,7 +21,7 @@ int main(int argc, char** argv){
   current_time = ros::Time::now();
   last_time = ros::Time::now();
 
-  ros::Rate r(1.0);
+  ros::Rate r(10.0);
   while(n.ok()){
 
     ros::spinOnce();               // check for incoming messages

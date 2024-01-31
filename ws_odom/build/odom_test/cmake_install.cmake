@@ -1,8 +1,8 @@
-# Install script for directory: /home/aristeujo/Documentos/TCC_codes/ws_odom/src/odom_test
+# Install script for directory: /home/aristeujo/TCC/ws_odom/src/odom_test
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
-  set(CMAKE_INSTALL_PREFIX "/home/aristeujo/Documentos/TCC_codes/ws_odom/install")
+  set(CMAKE_INSTALL_PREFIX "/home/aristeujo/TCC/ws_odom/install")
 endif()
 string(REGEX REPLACE "/$" "" CMAKE_INSTALL_PREFIX "${CMAKE_INSTALL_PREFIX}")
 
@@ -38,17 +38,17 @@ if(NOT DEFINED CMAKE_CROSSCOMPILING)
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/pkgconfig" TYPE FILE FILES "/home/aristeujo/Documentos/TCC_codes/ws_odom/build/odom_test/catkin_generated/installspace/odom_test.pc")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/pkgconfig" TYPE FILE FILES "/home/aristeujo/TCC/ws_odom/build/odom_test/catkin_generated/installspace/odom_test.pc")
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
   file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/odom_test/cmake" TYPE FILE FILES
-    "/home/aristeujo/Documentos/TCC_codes/ws_odom/build/odom_test/catkin_generated/installspace/odom_testConfig.cmake"
-    "/home/aristeujo/Documentos/TCC_codes/ws_odom/build/odom_test/catkin_generated/installspace/odom_testConfig-version.cmake"
+    "/home/aristeujo/TCC/ws_odom/build/odom_test/catkin_generated/installspace/odom_testConfig.cmake"
+    "/home/aristeujo/TCC/ws_odom/build/odom_test/catkin_generated/installspace/odom_testConfig-version.cmake"
     )
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/odom_test" TYPE FILE FILES "/home/aristeujo/Documentos/TCC_codes/ws_odom/src/odom_test/package.xml")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/odom_test" TYPE FILE FILES "/home/aristeujo/TCC/ws_odom/src/odom_test/package.xml")
 endif()
 

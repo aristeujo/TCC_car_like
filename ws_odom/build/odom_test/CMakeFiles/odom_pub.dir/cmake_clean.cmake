@@ -1,6 +1,6 @@
 file(REMOVE_RECURSE
-  "/home/aristeujo/Documentos/TCC_codes/ws_odom/devel/lib/odom_test/odom_pub"
-  "/home/aristeujo/Documentos/TCC_codes/ws_odom/devel/lib/odom_test/odom_pub.pdb"
+  "/home/aristeujo/TCC/ws_odom/devel/lib/odom_test/odom_pub"
+  "/home/aristeujo/TCC/ws_odom/devel/lib/odom_test/odom_pub.pdb"
   "CMakeFiles/odom_pub.dir/src/odom_pub.cpp.o"
 )
 

@@ -1,6 +1,6 @@
 # CMake generated Testfile for 
 # Source directory: /usr/src/googletest
-# Build directory: /home/aristeujo/Documentos/TCC_codes/ws_odom/build/gtest
+# Build directory: /home/aristeujo/TCC/ws_odom/build/gtest
 # 
 # This file includes the relevant testing commands required for 
 # testing this directory and lists subdirectories to be tested as well.
