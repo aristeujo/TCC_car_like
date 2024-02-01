@@ -2,7 +2,7 @@
     <arg name="x_initial" default="0.0"/>
     <arg name="y_initial" default="0.0"/>
     <arg name="yaw_initial" default="0.0"/>
-    <arg name="rpm_setpoint" default="220.0"/>
+    <arg name="cruising_speed" default="0.45"/>
     <arg name="time" default="10.0"/>
 
     <rosparam command="load" file="$(find ros_esp32)/config/param.yml"/>
@@ -11,7 +11,7 @@
         <param name="x_initial" type="double" value="$(arg x_initial)"/>
         <param name="y_initial" type="double" value="$(arg y_initial)"/>
         <param name="yaw_initial" type="double" value="$(arg yaw_initial)"/>
-        <param name="rpm_setpoint" type="double" value="$(arg rpm_setpoint)"/>
+        <param name="cruising_speed" type="double" value="$(arg cruising_speed)"/>
         <param name="time" type="double" value="$(arg time)"/>
     </node>
 </launch>
