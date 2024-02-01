@@ -1,4 +1,5 @@
 #include "ros/ros.h"
+#include <std_msgs/String.h>
 #include <ackermann_msgs/AckermannDriveStamped.h>
 #include <tf/transform_broadcaster.h>
 #include "my_project_msgs/Sensors.h"
@@ -51,13 +52,15 @@ private:
     ros::Time current_time_, last_time_;
     ros::Subscriber car_commands_;
     ros::Publisher car_commands_pub_;
-    ros::Timer timer;
+    ros::Subscriber iniTeste;
+    ros::Timer timerEnd;
 
 public:
     Sensors_listener(ros::NodeHandle *nh);
     void sensorsCallback(const my_project_msgs::Sensors &msg);
     void ackermannCallback(const ackermann_msgs::AckermannDriveStamped &msg);
-    void timerCallback(const ros::TimerEvent &event);
+    void initCallback(const std_msgs::String &msg);
+    void timerEndCallback(const ros::TimerEvent &event);
     double estimated_integral(double state_dot);
     void odometry_calc();
     void sendAckerCommands(double linear_speed, double steering_angle);
@@ -75,7 +78,8 @@ Sensors_listener::Sensors_listener(ros::NodeHandle *nh)
     odom_pub_ = nh->advertise<nav_msgs::Odometry>("odom", 100);
     car_commands_ = nh->subscribe("/ackermann_cmd", 100, &Sensors_listener::ackermannCallback, this);
     car_commands_pub_ = nh->advertise<my_project_msgs::Command_ackermann>("/cmd_car", 100); 
-    timer = nh->createTimer(ros::Duration(10), &Sensors_listener::timerCallback, this);
+    iniTeste = nh->subscribe("/iniTeste", 100, &Sensors_listener::initCallback, this);
+    timerEnd = nh->createTimer(ros::Duration(20), &Sensors_listener::timerEndCallback, this);
 }
 
 void Sensors_listener::odometry_calc(){
@@ -130,7 +134,7 @@ void Sensors_listener::odometry_calc(){
     // ROS_INFO("X: %.2f || Y: %.2f || Theta: %.4f || Yaw_MPU: %.4f || Yaw_est: %.4f", x_, y_, yaw_, yaw__1, yaw_est_);
 
 
-    if(flag == 0) controller(220.0);
+    if(flag == 1) controller(220.0);
 
     // Create Quartenion from Yaw angle
     geometry_msgs::Quaternion odom_quat = tf::createQuaternionMsgFromYaw(yaw_);
@@ -250,10 +254,21 @@ void Sensors_listener::ackermannCallback(const ackermann_msgs::AckermannDriveSta
     // ROS_INFO("rpm:%.2f angle_servo:%.2f", rpm, angle_servo);
 }
 
-void Sensors_listener::timerCallback(const ros::TimerEvent &event){
+void Sensors_listener::initCallback(const std_msgs::String &msg){
+    if(msg.data == "start"){
+        ros::NodeHandle nh;
+        timerEnd = nh.createTimer(ros::Duration(10), &Sensors_listener::timerEndCallback, this);
+        ROS_INFO("Teste iniciado");
+        flag = 1;
+    }  
+}
 
-    sendAckerCommands(0.0, 89.0);
-    flag = 2;
+void Sensors_listener::timerEndCallback(const ros::TimerEvent &event){
+    if(flag == 1){
+        ROS_INFO("Teste finalizado");
+        sendAckerCommands(0.0, 89.0);
+        flag = 2;
+    }
 
 }
 
