@@ -1,0 +1,17 @@
+# Car parameters
+wheelBase: 0.248
+wheelRadius: 0.0335
+
+# Parameters actuators
+offset_angle_servo: 89
+min_angle_servo: 20
+max_angle_servo: -20
+
+# Gain controllers
+K_1: -6.7804
+K_2: -7.0238
+
+# Parameters path
+A: -1
+B: 1
+C: 0

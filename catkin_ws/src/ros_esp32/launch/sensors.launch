@@ -1,4 +1,17 @@
 <launch>
-    <node name="sensors_node" pkg="ros_esp32" type="sensors_node" output="screen"/>
-    <node name="rviz" pkg="rviz" type="rviz"/>
+    <arg name="x_initial" default="0.0"/>
+    <arg name="y_initial" default="0.0"/>
+    <arg name="yaw_initial" default="0.0"/>
+    <arg name="rpm_setpoint" default="220.0"/>
+    <arg name="time" default="10.0"/>
+
+    <rosparam command="load" file="$(find ros_esp32)/config/param.yml"/>
+
+    <node name="sensors_node" pkg="ros_esp32" type="sensors_node" output="screen">
+        <param name="x_initial" type="double" value="$(arg x_initial)"/>
+        <param name="y_initial" type="double" value="$(arg y_initial)"/>
+        <param name="yaw_initial" type="double" value="$(arg yaw_initial)"/>
+        <param name="rpm_setpoint" type="double" value="$(arg rpm_setpoint)"/>
+        <param name="time" type="double" value="$(arg time)"/>
+    </node>
 </launch>

@@ -11,8 +11,8 @@ class Sensors_listener
 {
 private:
     //ROS parameters in m
-    double wheelbase_ = 0.248;
-    double wheelRadius_ = 0.0335;
+    double wheelbase_;
+    double wheelRadius_;
 
     const char *topic_sub_ = "/sensors_values";
     float rpm_eixo_;
@@ -21,25 +21,32 @@ private:
     float angularVelocityZ_;
 
     // path coeficients
-    double A = -1, B = 1, C = 0;
+    double A, B, C;
 
     // ackermann msgs commands
     double linear_speed_ = 0.0, steering_angle_ = 0.0, last_steering_angle = 0.0;
 
     // converted ackermann commands
-    double rpm = 0.0;
-    double angle_servo = 89;
+    double rpm_;
+    double rpm_setpoint;
+    double angle_servo;
+    double min_angle_servo;
+    double max_angle_servo;
+    double min_angle_servo_radians;
+    double max_angle_servo_radians;
 
     // controller gains
     // double k[2] = {-82.3535, -147.7895};
-    double k[2] = {-6.7804, -7.0238};
+    double K_1, K_2;
     
-
     // Wheel velocities in mm/s
     double vL_, vR_;
 
     //odom state
-    double x_ = 1, y_ = 0, yaw_ = M_PI/2, yaw_mpu_, yaw_est_, theta_, theta_dot_, current_angular_velocity;
+    double x_, y_, yaw_, yaw_mpu_, yaw_est_, theta_, current_angular_velocity;
+
+    // Time Test
+    double time;
 
     //estimated integral
     double integral_approx_ = 0.0, i_ = 1.0;
@@ -49,7 +56,7 @@ private:
     ros::Subscriber sub_sensors_;
     ros::Publisher odom_pub_;
     tf::TransformBroadcaster odom_broadcaster_;
-    ros::Time current_time_, last_time_;
+    ros::Time current_time_;
     ros::Subscriber car_commands_;
     ros::Publisher car_commands_pub_;
     ros::Subscriber iniTeste;
@@ -72,14 +79,35 @@ public:
 
 Sensors_listener::Sensors_listener(ros::NodeHandle *nh)
 {       
+    nh->getParam("wheelBase", wheelbase_);
+    nh->getParam("wheelRadius", wheelRadius_);
+    nh->getParam("offset_angle_servo", angle_servo);
+    if(nh->getParam("min_angle_servo", min_angle_servo)){
+        min_angle_servo_radians = min_angle_servo*(M_PI/180);
+    }
+    if(nh->getParam("max_angle_servo", max_angle_servo)){
+        max_angle_servo_radians = max_angle_servo*(M_PI/180);
+    }
+
+    nh->getParam("K_1", K_1);
+    nh->getParam("K_2", K_2);
+    nh->getParam("A", A);
+    nh->getParam("B", B);
+    nh->getParam("C", C);
+
+    nh->getParam("/sensors_node/x_initial", x_);
+    nh->getParam("/sensors_node/y_initial", y_);
+    nh->getParam("/sensors_node/yaw_initial", yaw_);
+    nh->getParam("/sensors_node/rpm_setpoint", rpm_setpoint);
+    nh->getParam("/sensors_node/time", time);
+
     current_time_ = ros::Time::now();
-    last_time_ = ros::Time::now();
     sub_sensors_ = nh->subscribe(topic_sub_, 100, &Sensors_listener::sensorsCallback, this);
     odom_pub_ = nh->advertise<nav_msgs::Odometry>("odom", 100);
     car_commands_ = nh->subscribe("/ackermann_cmd", 100, &Sensors_listener::ackermannCallback, this);
     car_commands_pub_ = nh->advertise<my_project_msgs::Command_ackermann>("/cmd_car", 100); 
     iniTeste = nh->subscribe("/iniTeste", 100, &Sensors_listener::initCallback, this);
-    timerEnd = nh->createTimer(ros::Duration(20), &Sensors_listener::timerEndCallback, this);
+    timerEnd = nh->createTimer(ros::Duration(time), &Sensors_listener::timerEndCallback, this);
 }
 
 void Sensors_listener::odometry_calc(){
@@ -134,7 +162,7 @@ void Sensors_listener::odometry_calc(){
     // ROS_INFO("X: %.2f || Y: %.2f || Theta: %.4f || Yaw_MPU: %.4f || Yaw_est: %.4f", x_, y_, yaw_, yaw__1, yaw_est_);
 
 
-    if(flag == 1) controller(220.0);
+    if(flag == 1) controller(rpm_setpoint);
 
     // Create Quartenion from Yaw angle
     geometry_msgs::Quaternion odom_quat = tf::createQuaternionMsgFromYaw(yaw_);
@@ -199,8 +227,8 @@ void Sensors_listener::controller(double rpm){
     if(y_ < x_) e = (-1)*e;
 
     // control signal
-    double u = k[0]*e + k[1]*psi;
-    saturate(&u, -0.3491, 0.3491);
+    double u = K_1*e + K_2*psi;
+    saturate(&u, min_angle_servo_radians, max_angle_servo_radians);
 
     angle_servo = 89 - (180/M_PI)*u;
 
@@ -242,14 +270,14 @@ void Sensors_listener::ackermannCallback(const ackermann_msgs::AckermannDriveSta
     // }
 
     // else{
-    rpm = (60/2*M_PI*wheelRadius_)*(linear_speed_)*100;
+    rpm_ = (60/2*M_PI*wheelRadius_)*(linear_speed_)*100;
     // }
         
      
     angle_servo = 89 - (180/M_PI)*steering_angle_;
     saturate(&angle_servo, 69, 109);
 
-    sendAckerCommands(rpm, angle_servo);
+    sendAckerCommands(rpm_, angle_servo);
 
     // ROS_INFO("rpm:%.2f angle_servo:%.2f", rpm, angle_servo);
 }
