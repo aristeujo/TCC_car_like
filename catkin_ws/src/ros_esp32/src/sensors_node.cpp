@@ -122,7 +122,6 @@ Sensors_listener::Sensors_listener(ros::NodeHandle *nh)
     car_commands_ = nh->subscribe("/ackermann_cmd", 100, &Sensors_listener::ackermannCallback, this);
     car_commands_pub_ = nh->advertise<my_project_msgs::Command_ackermann>("/cmd_car", 100); 
     iniTeste = nh->subscribe("/iniTeste", 100, &Sensors_listener::initCallback, this);
-    // timerEnd = nh->createTimer(ros::Duration(time), &Sensors_listener::timerEndCallback, this);
 }
 
 void Sensors_listener::odometry_calc(){
@@ -150,7 +149,6 @@ void Sensors_listener::odometry_calc(){
         theta_ += current_angular_velocity*dt;
     }
 
-    // abs(theta_) >= 2*M_PI ? 0.0 : theta_;
     if(theta_ > M_PI) {theta_ -= 2*M_PI;}
     else if(theta_ < -M_PI) {theta_ += 2*M_PI;}
     
@@ -180,7 +178,6 @@ void Sensors_listener::odometry_calc(){
     // ROS_INFO("Theta: %.2f  ||    Yaw_mpu: %.2f    || Yaw_comb: %.2f", theta_, yaw_est_, yaw_);
     ROS_INFO("X: %.2f || Y: %.2f || Yaw: %.2f  || X_dot: %.2f || Y_dot: %.2f", x_, y_, yaw_, x_dot, y_dot);
     // ROS_INFO("X: %.2f || Y: %.2f || Theta: %.4f || Yaw_MPU: %.4f || Yaw_est: %.4f", x_, y_, yaw_, yaw__1, yaw_est_);
-
 
     // Create Quartenion from Yaw angle
     geometry_msgs::Quaternion odom_quat = tf::createQuaternionMsgFromYaw(yaw_);
@@ -220,8 +217,6 @@ void Sensors_listener::odometry_calc(){
     odom_pub_.publish(odom);
 }
 
-// ALPHA = 5.5
-
 void Sensors_listener::saturate(double* input, double lowerLimit, double upperLimit){
   if(*input < lowerLimit) *input = lowerLimit;
   if(*input > upperLimit) *input = upperLimit;
@@ -247,7 +242,7 @@ void Sensors_listener::controller(double rpm){
     // control signal
     double u = K_1*e + K_2*psi;
     saturate(&u, min_angle_servo_radians, max_angle_servo_radians);
-    ROS_INFO("u: %.2f", u);;
+    // ROS_INFO("u: %.2f", u);
 
     angle_servo = 89 - (180/M_PI)*u;
 
@@ -318,7 +313,6 @@ void Sensors_listener::timerEndCallback(const ros::TimerEvent &event){
     }
 
 }
-
 
 double Sensors_listener::estimated_integral(double state_dot){
 
