@@ -1,6 +1,7 @@
 file(REMOVE_RECURSE
-  "/home/aristeujo/Documentos/TCC_codes/catkin_ws/devel/share/gennodejs/ros/my_project_msgs/msg/Command_ackermann.js"
-  "/home/aristeujo/Documentos/TCC_codes/catkin_ws/devel/share/gennodejs/ros/my_project_msgs/msg/Sensors.js"
+  "/home/aristeujo/TCC/catkin_ws/devel/share/gennodejs/ros/my_project_msgs/msg/Command_ackermann.js"
+  "/home/aristeujo/TCC/catkin_ws/devel/share/gennodejs/ros/my_project_msgs/msg/Data.js"
+  "/home/aristeujo/TCC/catkin_ws/devel/share/gennodejs/ros/my_project_msgs/msg/Sensors.js"
   "CMakeFiles/my_project_msgs_generate_messages_nodejs"
 )
 

@@ -3,6 +3,8 @@
   (:export
    "<COMMAND_ACKERMANN>"
    "COMMAND_ACKERMANN"
+   "<DATA>"
+   "DATA"
    "<SENSORS>"
    "SENSORS"
   ))

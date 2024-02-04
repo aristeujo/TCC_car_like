@@ -16,6 +16,7 @@ add_message_files(
   FILES 
   Sensors.msg
   Command_ackermann.msg
+  Data.msg
 )
 
 generate_messages(

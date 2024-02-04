@@ -4,6 +4,7 @@
 #include <tf/transform_broadcaster.h>
 #include "my_project_msgs/Sensors.h"
 #include "my_project_msgs/Command_ackermann.h"
+#include "my_project_msgs/Data.h"
 #include <nav_msgs/Odometry.h>
 #include <math.h>
 
@@ -22,6 +23,9 @@ private:
     float rpm_as5600_R_;
     float rpm_as5600_L_;
     float angularVelocityZ_;
+
+     double e = 0.0;
+     double psi = 0.0;
 
     // path coeficients
     double A, B, C;
@@ -60,6 +64,7 @@ private:
 
     ros::Subscriber sub_sensors_;
     ros::Publisher odom_pub_;
+    ros::Publisher data_pub_;
     tf::TransformBroadcaster odom_broadcaster_;
     ros::Time current_time_;
     ros::Subscriber car_commands_;
@@ -80,6 +85,7 @@ public:
     void range(double *input);
     double calcDistance(double A, double B, double C, double x0, double y0);
     void controller(double rpm);
+    double angulo_reta(double A, double B, double C, double x1, double y1);
 };
 
 Sensors_listener::Sensors_listener(ros::NodeHandle *nh)
@@ -117,11 +123,13 @@ Sensors_listener::Sensors_listener(ros::NodeHandle *nh)
     yaw_ = initial_yaw_;
 
     current_time_ = ros::Time::now();
+    data_pub_ = nh->advertise<my_project_msgs::Data>("data_pub", 100);
     sub_sensors_ = nh->subscribe(topic_sub_, 100, &Sensors_listener::sensorsCallback, this);
     odom_pub_ = nh->advertise<nav_msgs::Odometry>("odom", 100);
     car_commands_ = nh->subscribe("/ackermann_cmd", 100, &Sensors_listener::ackermannCallback, this);
     car_commands_pub_ = nh->advertise<my_project_msgs::Command_ackermann>("/cmd_car", 100); 
     iniTeste = nh->subscribe("/iniTeste", 100, &Sensors_listener::initCallback, this);
+
 }
 
 void Sensors_listener::odometry_calc(){
@@ -215,6 +223,15 @@ void Sensors_listener::odometry_calc(){
 
     // Publish the odometry message
     odom_pub_.publish(odom);
+
+    my_project_msgs::Data msg_data;
+    msg_data.Yaw_odom = theta_;
+    msg_data.Yaw_mpu = yaw_mpu_;
+    msg_data.Yaw_combinado = yaw_;
+    msg_data.dist = e;
+    msg_data.psi = psi;
+
+    data_pub_.publish(msg_data);
 }
 
 void Sensors_listener::saturate(double* input, double lowerLimit, double upperLimit){
@@ -233,11 +250,25 @@ double Sensors_listener::calcDistance(double A, double B, double C, double x0, d
     return distancia;
 }
 
-void Sensors_listener::controller(double rpm){
-    double e = calcDistance(A, B, C, x_, y_);
-    double psi = yaw_ - atan(1);
+double Sensors_listener::angulo_reta(double A, double B, double C, double x1, double y1){
 
-    if(y_ < x_) e = (-1)*e;
+    double m = (-A/B);
+    double c = (-C/B);
+
+    double angulo = atan2(m, 1) - atan2(y1 - m*x1 - c, x1);
+
+    return angulo;
+
+}
+
+void Sensors_listener::controller(double rpm){
+    double m = (-A/B);
+
+    e = calcDistance(A, B, C, x_, y_);
+    // psi = yaw_ - atan(1);
+    psi = yaw_ - angulo_reta(A, B, C, x_, y_);
+
+    if(y_ < m*x_) e = (-1)*e;
 
     // control signal
     double u = K_1*e + K_2*psi;
