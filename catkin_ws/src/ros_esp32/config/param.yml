@@ -4,8 +4,8 @@ wheelRadius: 0.0335
 
 # Parameters actuators
 offset_angle_servo: 89
-min_angle_servo: -20
-max_angle_servo: 20
+min_angle_servo: -31
+max_angle_servo: 31
 max_speed: 0.45
 
 # Gain controllers

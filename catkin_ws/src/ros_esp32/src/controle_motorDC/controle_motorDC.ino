@@ -16,26 +16,26 @@ void ISR_contador();
 void setupWiFi();
 void cmdVel_to_pwm( const my_project_msgs::Command_ackermann &cmd);
 
-#define FORWARD 1
-#define BACKWARD 0
+#define FORWARD 0
+#define BACKWARD 1
 #define STOP 2
 
 #define ENC_IN_A 12 // Fio verde
 #define ENC_IN_B 13 // Fio Amarelo
 #define potPin  34
 
-// IPAddress server(192, 168, 0, 30); //IP do/ desktop da minha casa
+ IPAddress server(192, 168, 0, 30); //IP do/ desktop da minha casa
 
 // IPAddress server(192, 168, 15, 6); //IP do/ desktop do Graest
 
-IPAddress server(192,169,141,72); //IP do /notebook do STEM
+//IPAddress server(192,169,141,72); //IP do /notebook do STEM
 
 uint16_t serverPort = 11411;
-//const char*  ssid = "Seixas_Net";
-//const char*  password = "Mayum647";
+const char*  ssid = "Seixas_Net";
+const char*  password = "Mayum647";
 
-const char*  ssid = "STEMLABNET";
-const char*  password = "1n0v@t3ch.5t3m@#!";
+//const char*  ssid = "STEMLABNET";
+//const char*  password = "1n0v@t3ch.5t3m@#!";
 
 //const char*  ssid = "NucleoRobotica2g";
 //const char*  password = "!gra.3st#";
@@ -52,8 +52,9 @@ Encoder encoder;
 int r = 0;
 int pwm = 0;
 float u = 0;
-float angle = 89.0;
+float angle = 92;
 float error = 0;
+int state = 0;
 
 //bateria antiga
 //float Kp = 1.9178;
@@ -135,9 +136,9 @@ void loop() {
     }
 
      // Update control signal
-     error += r - rpm; 
-     u = Kp*(r - rpm) + Ki*error;
-     saturate(&u,0,230);  
+//     error += r - rpm; 
+//     u = Kp*(r - rpm) + Ki*error;
+//     saturate(&u,0,230);  
 
      // Publish in ROS topic
      msg.encoder_eixo = rpm;
@@ -150,7 +151,7 @@ void loop() {
 //      Serial.printf("r:%d RPM:%.2f u:%.2f\n",r, rpm, angle);
 //    Serial.printf("RPM:%.2f  AS5600_L: %.2f  AS5600_R: %.2f  Z_angle: %.2f\n", rpm, enc_as5600_L, enc_as5600_R, mpu6050.angularVelocityZ);
 //     Serial.printf("r:%.2f  x_hat:%.2f y: %.2f\n", Controller.r(0), states(0), rpm);
-     motor.motorSpeed(u, FORWARD); // Min = 150 || Max = 230
+     motor.motorSpeed(r, state); // Min = 150 || Max = 230
      motor.setAngle(angle);
      
      timer = millis();
@@ -197,9 +198,22 @@ void setupWiFi(){
      float motor_speed = cmd.rpm;
      float steering_angle = cmd.servo_angle;
 
+     if(motor_speed > 5){
+      state = FORWARD;
+     }
+
+     else if(motor_speed < -5){
+      state = BACKWARD;
+     }
+
+     else if(motor_speed == 0){
+      state = STOP;
+     }
+
      // RPM setpoint
-     r = motor_speed; 
+     r = abs(motor_speed); 
 
      angle = steering_angle;
-     
+
+//     Serial.println(angle);
  }

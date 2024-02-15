@@ -51,7 +51,7 @@ class AckermannDriveKeyop:
             max_steering_angle = float(args[1])
         else:
             max_speed = 1
-            max_steering_angle = 0.349066
+            max_steering_angle = 0.541052
 
             # max_speed = 0.2
             # max_steering_angle = 180

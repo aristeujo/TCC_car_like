@@ -1,8 +1,8 @@
-prefix=/home/aristeujo/TCC/catkin_ws/devel
+prefix=/home/aristeujo/Documentos/TCC_codes/catkin_ws/devel
 
 Name: ackermann_drive_teleop
 Description: Description of ackermann_drive_teleop
 Version: 0.0.0
-Cflags: -I/home/aristeujo/TCC/catkin_ws/src/ackermann-drive-teleop/scripts
+Cflags: -I/home/aristeujo/Documentos/TCC_codes/catkin_ws/src/ackermann-drive-teleop/scripts
 Libs: -L${prefix}/lib 
 Requires: rospy ackermann_msgs

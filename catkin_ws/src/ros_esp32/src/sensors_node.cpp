@@ -275,7 +275,7 @@ void Sensors_listener::controller(double rpm){
     saturate(&u, min_angle_servo_radians, max_angle_servo_radians);
     // ROS_INFO("u: %.2f", u);
 
-    angle_servo = 89 - (180/M_PI)*u;
+    angle_servo = 92 + (180/M_PI)*u;
 
     // send r and u to ESP32
     sendAckerCommands(rpm, angle_servo);
@@ -296,7 +296,7 @@ void Sensors_listener::sensorsCallback(const my_project_msgs::Sensors &msg){
     this->rpm_as5600_R_ = msg.encoder_as5600_R;
     this->angularVelocityZ_ = msg.angularVelocity;
 
-    odometry_calc();
+    // odometry_calc();
 
     // ROS_INFO("Eixo:%.2f AS5600_L:%.2f AS5600_R:%.2f", this->rpm_eixo_, this->rpm_as5600_L_, this->rpm_as5600_R_);
 }
@@ -315,16 +315,26 @@ void Sensors_listener::ackermannCallback(const ackermann_msgs::AckermannDriveSta
     // }
 
     // else{
-    rpm_ = (60/2*M_PI*wheelRadius_)*(linear_speed_)*100;
+    rpm_ = (60/2*M_PI*0.0335)*(linear_speed_)*100;
+    if(linear_speed_ > 0){
+        saturate(&rpm_, 5, 255);
+    }
+    else if(linear_speed_< 0){
+        saturate(&rpm_, -255, 5);
+    }
+    else if(linear_speed_ == 0){
+        rpm_ = 0;
+    }
+    
     // }
         
      
-    angle_servo = 89 - (180/M_PI)*steering_angle_;
-    saturate(&angle_servo, 69, 109);
+    angle_servo = 92 + (180/M_PI)*steering_angle_;
+    saturate(&angle_servo, 61, 130);
 
     sendAckerCommands(rpm_, angle_servo);
 
-    // ROS_INFO("rpm:%.2f angle_servo:%.2f", rpm, angle_servo);
+    ROS_INFO("rpm:%.2f angle_servo:%.2f", rpm_, angle_servo);
 }
 
 void Sensors_listener::initCallback(const std_msgs::String &msg){
@@ -339,7 +349,7 @@ void Sensors_listener::initCallback(const std_msgs::String &msg){
 void Sensors_listener::timerEndCallback(const ros::TimerEvent &event){
     if(flag == 1){
         ROS_INFO("Teste finalizado");
-        sendAckerCommands(0.0, 89.0);
+        sendAckerCommands(0.0, 95.0);
         flag = 2;
     }
 
