@@ -11,7 +11,7 @@
 		],
 		"files" : 
 		[
-			"/home/aristeujo/Documentos/TCC_codes/catkin_ws/build/my_project_msgs/cmake/my_project_msgs-genmsg.cmake",
+			"/home/aristeujo/TCC/catkin_ws/build/my_project_msgs/cmake/my_project_msgs-genmsg.cmake",
 			"/opt/ros/noetic/share/genmsg/cmake/genmsg-extras.cmake",
 			"my_project_msgs/CMakeLists.txt"
 		],

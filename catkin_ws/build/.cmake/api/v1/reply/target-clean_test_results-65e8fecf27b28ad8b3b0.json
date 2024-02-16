@@ -87,13 +87,13 @@
 		{
 			"backtrace" : 7,
 			"isGenerated" : true,
-			"path" : "/home/aristeujo/Documentos/TCC_codes/catkin_ws/build/CMakeFiles/clean_test_results",
+			"path" : "/home/aristeujo/TCC/catkin_ws/build/CMakeFiles/clean_test_results",
 			"sourceGroupIndex" : 0
 		},
 		{
 			"backtrace" : 0,
 			"isGenerated" : true,
-			"path" : "/home/aristeujo/Documentos/TCC_codes/catkin_ws/build/CMakeFiles/clean_test_results.rule",
+			"path" : "/home/aristeujo/TCC/catkin_ws/build/CMakeFiles/clean_test_results.rule",
 			"sourceGroupIndex" : 1
 		}
 	],

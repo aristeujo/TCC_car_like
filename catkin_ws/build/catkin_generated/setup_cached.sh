@@ -7,4 +7,4 @@
 # new environment variables
 
 # modified environment variables
-export PWD='/home/aristeujo/Documentos/TCC_codes/catkin_ws/build'
+export PWD='/home/aristeujo/TCC/catkin_ws/build'

@@ -8,12 +8,15 @@
 #include <nav_msgs/Odometry.h>
 #include <math.h>
 
+// raio_k = 0.59
+// aplha = 3.5 
+
 class Sensors_listener
 {
 private:
     //ROS parameters in m
-    double wheelbase_;
-    double wheelRadius_;
+    double wheelbase_ = 0.248;
+    double wheelRadius_ = 0.0335;
     double initial_x_;
     double initial_y_;
     double initial_yaw_;
@@ -51,7 +54,7 @@ private:
     double vL_, vR_;
 
     //odom state
-    double x_, y_, yaw_, yaw_mpu_, yaw_est_, theta_, current_angular_velocity;
+    double x_ = 0, y_, yaw_ = 0, yaw_mpu_, yaw_est_, theta_, current_angular_velocity;
     double current_speed = 0.0, x_dot = 0.0, y_dot = 0.0;
 
     // Time Test
@@ -60,7 +63,7 @@ private:
     //estimated integral
     double integral_approx_ = 0.0, i_ = 1.0;
 
-    int flag  = 0;
+    int flag  = 1;
 
     ros::Subscriber sub_sensors_;
     ros::Publisher odom_pub_;
@@ -90,8 +93,8 @@ public:
 
 Sensors_listener::Sensors_listener(ros::NodeHandle *nh)
 {       
-    nh->getParam("wheelBase", wheelbase_);
-    nh->getParam("wheelRadius", wheelRadius_);
+    // nh->getParam("wheelBase", wheelbase_);
+    // nh->getParam("wheelRadius", wheelRadius_);
     nh->getParam("offset_angle_servo", angle_servo);
     if(nh->getParam("min_angle_servo", min_angle_servo)){
         min_angle_servo_radians = min_angle_servo*(M_PI/180);
@@ -118,9 +121,9 @@ Sensors_listener::Sensors_listener(ros::NodeHandle *nh)
     }
     nh->getParam("/sensors_node/time", time);
 
-    x_ = initial_x_;
-    y_ = initial_y_;
-    yaw_ = initial_yaw_;
+    // x_ = initial_x_;
+    // y_ = initial_y_;
+    // yaw_ = initial_yaw_;
 
     current_time_ = ros::Time::now();
     data_pub_ = nh->advertise<my_project_msgs::Data>("data_pub", 100);
@@ -157,9 +160,12 @@ void Sensors_listener::odometry_calc(){
         theta_ += current_angular_velocity*dt;
     }
 
+    // range(&theta_);
     if(theta_ > M_PI) {theta_ -= 2*M_PI;}
     else if(theta_ < -M_PI) {theta_ += 2*M_PI;}
     
+    if(abs(angularVelocityZ_) < 0.08) angularVelocityZ_ = 0;
+
     yaw_mpu_ += angularVelocityZ_*dt;
     // yaw_est_ = estimated_integral(angularVelocityZ_);
 
@@ -172,15 +178,14 @@ void Sensors_listener::odometry_calc(){
     else{
         yaw_ = yaw_mpu_;
     }
-    yaw_ += initial_yaw_;
+    // yaw_ += initial_yaw_;
 
     if(yaw_ > M_PI) {yaw_ -= 2*M_PI;}
     else if(yaw_ < -M_PI) {yaw_ += 2*M_PI;}    
 
     // range(&yaw_);
-    // range(&theta_);
 
-    controller(motor_setpoint);
+    // controller(motor_setpoint);
     }
 
     // ROS_INFO("Theta: %.2f  ||    Yaw_mpu: %.2f    || Yaw_comb: %.2f", theta_, yaw_est_, yaw_);
@@ -296,9 +301,9 @@ void Sensors_listener::sensorsCallback(const my_project_msgs::Sensors &msg){
     this->rpm_as5600_R_ = msg.encoder_as5600_R;
     this->angularVelocityZ_ = msg.angularVelocity;
 
-    // odometry_calc();
+    odometry_calc();
 
-    // ROS_INFO("Eixo:%.2f AS5600_L:%.2f AS5600_R:%.2f", this->rpm_eixo_, this->rpm_as5600_L_, this->rpm_as5600_R_);
+    ROS_INFO("Eixo:%.2f AS5600_L:%.2f AS5600_R:%.2f", this->rpm_eixo_, this->rpm_as5600_L_, this->rpm_as5600_R_);
 }
 
 void Sensors_listener::ackermannCallback(const ackermann_msgs::AckermannDriveStamped &msg){
@@ -310,27 +315,29 @@ void Sensors_listener::ackermannCallback(const ackermann_msgs::AckermannDriveSta
 
     // RPM setpoint
 
-    // if(yaw__1 <= -1.4 && yaw__1 > -3.14) {
-    //     rpm = 0;
-    // }
 
-    // else{
+    
     rpm_ = (60/2*M_PI*0.0335)*(linear_speed_)*100;
+
     if(linear_speed_ > 0){
-        saturate(&rpm_, 5, 255);
+        saturate(&rpm_, 5, 240);
     }
     else if(linear_speed_< 0){
-        saturate(&rpm_, -255, 5);
+        saturate(&rpm_, -240, 5);
     }
     else if(linear_speed_ == 0){
         rpm_ = 0;
     }
     
     // }
+
+    // if(yaw_ <= -1.38 && yaw_ > -3.14) {
+    //     rpm_ = 0;
+    // }
         
      
     angle_servo = 92 + (180/M_PI)*steering_angle_;
-    saturate(&angle_servo, 61, 130);
+    saturate(&angle_servo, 65, 119);
 
     sendAckerCommands(rpm_, angle_servo);
 

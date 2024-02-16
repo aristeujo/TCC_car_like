@@ -24,21 +24,27 @@ void cmdVel_to_pwm( const my_project_msgs::Command_ackermann &cmd);
 #define ENC_IN_B 13 // Fio Amarelo
 #define potPin  34
 
- IPAddress server(192, 168, 0, 30); //IP do/ desktop da minha casa
+// IPAddress server(192, 168, 0, 30); //IP do/ desktop da minha casa
 
 // IPAddress server(192, 168, 15, 6); //IP do/ desktop do Graest
 
 //IPAddress server(192,169,141,72); //IP do /notebook do STEM
 
+IPAddress server(192,168,8,253); //IP do /notebook do STEM
+
+
 uint16_t serverPort = 11411;
-const char*  ssid = "Seixas_Net";
-const char*  password = "Mayum647";
+//const char*  ssid = "Seixas_Net";
+//const char*  password = "Mayum647";
 
 //const char*  ssid = "STEMLABNET";
 //const char*  password = "1n0v@t3ch.5t3m@#!";
 
 //const char*  ssid = "NucleoRobotica2g";
 //const char*  password = "!gra.3st#";
+
+const char*  ssid = "Teste";
+const char*  password = "12345678";
 
 
 ros::NodeHandle  nh;
