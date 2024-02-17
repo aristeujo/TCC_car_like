@@ -15,8 +15,8 @@ class Sensors_listener
 {
 private:
     //ROS parameters in m
-    double wheelbase_ = 0.248;
-    double wheelRadius_ = 0.0335;
+    double wheelbase_;
+    double wheelRadius_;
     double initial_x_;
     double initial_y_;
     double initial_yaw_;
@@ -63,7 +63,7 @@ private:
     //estimated integral
     double integral_approx_ = 0.0, i_ = 1.0;
 
-    int flag  = 1;
+    int flag  = 0;
 
     ros::Subscriber sub_sensors_;
     ros::Publisher odom_pub_;
@@ -93,8 +93,8 @@ public:
 
 Sensors_listener::Sensors_listener(ros::NodeHandle *nh)
 {       
-    // nh->getParam("wheelBase", wheelbase_);
-    // nh->getParam("wheelRadius", wheelRadius_);
+    nh->getParam("wheelBase", wheelbase_);
+    nh->getParam("wheelRadius", wheelRadius_);
     nh->getParam("offset_angle_servo", angle_servo);
     if(nh->getParam("min_angle_servo", min_angle_servo)){
         min_angle_servo_radians = min_angle_servo*(M_PI/180);
@@ -113,17 +113,18 @@ Sensors_listener::Sensors_listener(ros::NodeHandle *nh)
     nh->getParam("/sensors_node/y_initial", initial_y_);
     nh->getParam("/sensors_node/yaw_initial", initial_yaw_);
     if(nh->getParam("/sensors_node/cruising_speed", cruising_speed)){
-        if(cruising_speed > max_speed){
-            cruising_speed = max_speed;
-        }
+        // if(cruising_speed > max_speed){
+        //     cruising_speed = max_speed;
+        // }
 
-        motor_setpoint = 285.0536294*cruising_speed*beta; 
+        // motor_setpoint = 285.0536294*cruising_speed*beta; 
+        motor_setpoint = cruising_speed;
     }
     nh->getParam("/sensors_node/time", time);
 
-    // x_ = initial_x_;
-    // y_ = initial_y_;
-    // yaw_ = initial_yaw_;
+    x_ = initial_x_;
+    y_ = initial_y_;
+    yaw_ = initial_yaw_;
 
     current_time_ = ros::Time::now();
     data_pub_ = nh->advertise<my_project_msgs::Data>("data_pub", 100);
@@ -185,7 +186,7 @@ void Sensors_listener::odometry_calc(){
 
     // range(&yaw_);
 
-    // controller(motor_setpoint);
+    controller(motor_setpoint);
     }
 
     // ROS_INFO("Theta: %.2f  ||    Yaw_mpu: %.2f    || Yaw_comb: %.2f", theta_, yaw_est_, yaw_);
@@ -356,7 +357,7 @@ void Sensors_listener::initCallback(const std_msgs::String &msg){
 void Sensors_listener::timerEndCallback(const ros::TimerEvent &event){
     if(flag == 1){
         ROS_INFO("Teste finalizado");
-        sendAckerCommands(0.0, 95.0);
+        sendAckerCommands(0.0, 92.0);
         flag = 2;
     }
 

@@ -24,18 +24,18 @@ void cmdVel_to_pwm( const my_project_msgs::Command_ackermann &cmd);
 #define ENC_IN_B 13 // Fio Amarelo
 #define potPin  34
 
-// IPAddress server(192, 168, 0, 30); //IP do/ desktop da minha casa
+ IPAddress server(192, 168, 0, 30); //IP do/ desktop da minha casa
 
 // IPAddress server(192, 168, 15, 6); //IP do/ desktop do Graest
 
 //IPAddress server(192,169,141,72); //IP do /notebook do STEM
 
-IPAddress server(192,168,8,253); //IP do /notebook do STEM
+//IPAddress server(192,168,8,253); //IP do /notebook do STEM
 
 
 uint16_t serverPort = 11411;
-//const char*  ssid = "Seixas_Net";
-//const char*  password = "Mayum647";
+const char*  ssid = "Seixas_Net";
+const char*  password = "Mayum647";
 
 //const char*  ssid = "STEMLABNET";
 //const char*  password = "1n0v@t3ch.5t3m@#!";
@@ -43,8 +43,8 @@ uint16_t serverPort = 11411;
 //const char*  ssid = "NucleoRobotica2g";
 //const char*  password = "!gra.3st#";
 
-const char*  ssid = "Teste";
-const char*  password = "12345678";
+//const char*  ssid = "Teste";
+//const char*  password = "12345678";
 
 
 ros::NodeHandle  nh;
@@ -71,11 +71,11 @@ int state = 0;
 //float Ki = 0.9067;
 
 //Funcionando com Hinf + sat
-//float Kp = -1.7784;
-//float Ki = 0.4779;
+float Kp = -1.7784;
+float Ki = 0.4779;
 
-float Kp = -7.1921;
-float Ki = 2.5403;
+//float Kp = -7.1921;
+//float Ki = 2.5403;
 
 TwoWire Wire_1 = TwoWire(1);
 
@@ -149,8 +149,8 @@ void loop() {
     }
 
      // Update control signal 
-     u = Kp*rpm + Ki*x_i;
-     x_i += r - rpm;
+//     u = Kp*rpm + Ki*x_i;
+//     x_i += r - rpm;
 
      saturate(&u,0,230);  
 
@@ -165,7 +165,7 @@ void loop() {
       Serial.printf("r:%d RPM:%.2f u:%.2f\n",r, rpm, u);
 //    Serial.printf("RPM:%.2f  AS5600_L: %.2f  AS5600_R: %.2f  Z_angle: %.2f\n", rpm, enc_as5600_L, enc_as5600_R, mpu6050.angularVelocityZ);
 //     Serial.printf("r:%.2f  x_hat:%.2f y: %.2f\n", Controller.r(0), states(0), rpm);
-     motor.motorSpeed(u, state); // Min = 150 || Max = 230
+     motor.motorSpeed(r, state); // Min = 150 || Max = 230
      motor.setAngle(angle);
      
      timer = millis();

@@ -1,7 +1,7 @@
 file(REMOVE_RECURSE
-  "/home/aristeujo/TCC/catkin_ws/devel/include/my_project_msgs/Command_ackermann.h"
-  "/home/aristeujo/TCC/catkin_ws/devel/include/my_project_msgs/Data.h"
-  "/home/aristeujo/TCC/catkin_ws/devel/include/my_project_msgs/Sensors.h"
+  "/home/aristeujo/Documentos/TCC_codes/catkin_ws/devel/include/my_project_msgs/Command_ackermann.h"
+  "/home/aristeujo/Documentos/TCC_codes/catkin_ws/devel/include/my_project_msgs/Data.h"
+  "/home/aristeujo/Documentos/TCC_codes/catkin_ws/devel/include/my_project_msgs/Sensors.h"
   "CMakeFiles/my_project_msgs_generate_messages_cpp"
 )
 

@@ -3,9 +3,9 @@ wheelBase: 0.248
 wheelRadius: 0.0335
 
 # Parameters actuators
-offset_angle_servo: 89
-min_angle_servo: -31
-max_angle_servo: 31
+offset_angle_servo: 92
+min_angle_servo: -27
+max_angle_servo: 27
 max_speed: 0.45
 
 # Gain controllers
@@ -17,11 +17,16 @@ max_speed: 0.45
 # K_1: -13.9923  
 # K_2: -6.2294
 
-K_1: -14.8101 
-K_2: -4.9793
+# K_1: -14.8101 
+# K_2: -4.9793
 
 # k_1: -22.1627
 # K_2: -5.7312
+
+# LMI disc
+
+k_1: -3.894
+K_2: -6.5671
 
 # Parameters path
 A: -0.5774
