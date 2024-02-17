@@ -59,16 +59,23 @@ int r = 0;
 int pwm = 0;
 float u = 0;
 float angle = 92;
-float error = 0;
+float x_i = 0;
 int state = 0;
 
-//bateria antiga
-//float Kp = 1.9178;
-//float Ki = 0.5434;
+//hinf
+//float Kp = -3.297;
+//float Ki = 1.325;
 
-// bateria nova
-float Kp = 0.9672;
-float Ki = 0.5682;
+// sat
+//float Kp = -2.8053;
+//float Ki = 0.9067;
+
+//Funcionando com Hinf + sat
+//float Kp = -1.7784;
+//float Ki = 0.4779;
+
+float Kp = -7.1921;
+float Ki = 2.5403;
 
 TwoWire Wire_1 = TwoWire(1);
 
@@ -141,10 +148,11 @@ void loop() {
       enc_as5600_R = 0.0;
     }
 
-     // Update control signal
-//     error += r - rpm; 
-//     u = Kp*(r - rpm) + Ki*error;
-//     saturate(&u,0,230);  
+     // Update control signal 
+     u = Kp*rpm + Ki*x_i;
+     x_i += r - rpm;
+
+     saturate(&u,0,230);  
 
      // Publish in ROS topic
      msg.encoder_eixo = rpm;
@@ -154,10 +162,10 @@ void loop() {
      chatter.publish(&msg);
 
       // Debug info
-//      Serial.printf("r:%d RPM:%.2f u:%.2f\n",r, rpm, angle);
+      Serial.printf("r:%d RPM:%.2f u:%.2f\n",r, rpm, u);
 //    Serial.printf("RPM:%.2f  AS5600_L: %.2f  AS5600_R: %.2f  Z_angle: %.2f\n", rpm, enc_as5600_L, enc_as5600_R, mpu6050.angularVelocityZ);
 //     Serial.printf("r:%.2f  x_hat:%.2f y: %.2f\n", Controller.r(0), states(0), rpm);
-     motor.motorSpeed(r, state); // Min = 150 || Max = 230
+     motor.motorSpeed(u, state); // Min = 150 || Max = 230
      motor.setAngle(angle);
      
      timer = millis();
@@ -173,12 +181,13 @@ void loop() {
  void ISR_contador(){
    int val = digitalRead(ENC_IN_B);
 
-   if (val == LOW) {
-     encoder.direcao = false; // Trás
-   }
-   else {
-     encoder.direcao = true; // Frente
-   }
+
+  if (val == LOW) {
+    encoder.direcao = true; // Trás
+  }
+  else {
+    encoder.direcao = false; // Frente
+  }
 
    if (encoder.direcao) {
      encoder.pulsos_roda++;
@@ -217,7 +226,7 @@ void setupWiFi(){
      }
 
      // RPM setpoint
-     r = abs(motor_speed); 
+     r = floor(abs(motor_speed)); 
 
      angle = steering_angle;
 
