@@ -63,7 +63,7 @@ private:
     //estimated integral
     double integral_approx_ = 0.0, i_ = 1.0;
 
-    int flag  = 0;
+    int flag  = 1;
 
     ros::Subscriber sub_sensors_;
     ros::Publisher odom_pub_;
@@ -179,14 +179,14 @@ void Sensors_listener::odometry_calc(){
     else{
         yaw_ = yaw_mpu_;
     }
-    // yaw_ += initial_yaw_;
+    yaw_ += initial_yaw_;
 
     if(yaw_ > M_PI) {yaw_ -= 2*M_PI;}
     else if(yaw_ < -M_PI) {yaw_ += 2*M_PI;}    
 
     // range(&yaw_);
 
-    controller(motor_setpoint);
+    // controller(motor_setpoint);
     }
 
     // ROS_INFO("Theta: %.2f  ||    Yaw_mpu: %.2f    || Yaw_comb: %.2f", theta_, yaw_est_, yaw_);
@@ -357,8 +357,8 @@ void Sensors_listener::initCallback(const std_msgs::String &msg){
 void Sensors_listener::timerEndCallback(const ros::TimerEvent &event){
     if(flag == 1){
         ROS_INFO("Teste finalizado");
-        sendAckerCommands(0.0, 92.0);
-        flag = 2;
+        // sendAckerCommands(0.0, 92.0);
+        // flag = 2;
     }
 
 }

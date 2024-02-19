@@ -41,38 +41,38 @@ class listener:
         self.data_sub = rospy.Subscriber("data_pub", Data, self.callback_data)
 
     def callback_sensors(self, data):
-        self.rpm_encoder_eixo = data.encoder_eixo
-        self.rpm_R = data.encoder_as5600_R
-        self.rpm_L = data.encoder_as5600_L
+        self.rpm_encoder_eixo = round(data.encoder_eixo,2)
+        self.rpm_R = round(data.encoder_as5600_R,2)
+        self.rpm_L = round(data.encoder_as5600_L,2)
 
     def callback_cmd(self, data):
     #  RPM ajustado para o motor
-       self.setpoint_motor = data.rpm
+       self.setpoint_motor = round(data.rpm,2)
 
+    #  sinal de controle em rad (-27, 27)
+       self.u = round(data.servo_angle,2)
+    
     #  angulo ajustado para o servo motor com orientação reta em 89°
-       self.angle_servo = data.servo_angle
-    #  sinal de controle em rad (-20, 20)
-       self.u = 89 - self.angle_servo
+       self.angle_servo = round(92 + data.servo_angle,2)
 
     def callback_data(self, data):
         # Yaw obtido na odometria
-        self.yaw_odom = data.Yaw_odom
-        self.yaw_mpu = data.Yaw_mpu
-        self.yaw_comb = data.Yaw_combinado
-        self.dist = data.dist
-        self.psi = data.psi
+        self.yaw_odom = round(data.Yaw_odom,2)
+        self.yaw_mpu = round(data.Yaw_mpu,2)
+        self.yaw_comb = round(data.Yaw_combinado,2)
+        self.dist = round(data.dist, 2)
+        self.psi = round(data.psi,2)
 
     def callback_odom(self, data):
         # posicao
-        self.x = data.pose.pose.position.x
-        self.y = data.pose.pose.position.y
-        self.orientationZ = data.pose.pose.orientation.z
-        self.orientationW = data.pose.pose.orientation.w
+        self.x = round(data.pose.pose.position.x,2)
+        self.y = round(data.pose.pose.position.y,2)
+        self.orientationZ = round(data.pose.pose.orientation.z,2)
 
         # velocidades
-        self.vX = data.twist.twist.linear.x
-        self.vY = data.twist.twist.linear.y
-        self.wZ = data.twist.twist.angular.z
+        self.vX = round(data.twist.twist.linear.x,2)
+        self.vY = round(data.twist.twist.linear.y,2)
+        self.wZ = round(data.twist.twist.angular.z,2)
 
         # rospy.loginfo("yaw = %f  wz= %f", self.orientationZ, self.wZ)
 
@@ -80,8 +80,12 @@ class listener:
         data = [self.rpm_encoder_eixo, self.rpm_L, self.rpm_R, self.x, self.y, self.orientationZ, self.vX, self.vY, self.wZ, 
                 self.setpoint_motor, self.angle_servo, self.u, self.yaw_odom, self.yaw_mpu, self.yaw_comb, self.dist, self.psi]
 
+        # data = [round(self.rpm_encoder_eixo, 2), round(self.rpm_L,2)]
+
+        rospy.loginfo("rodando")
+
         # Nome do arquivo CSV
-        nome_arquivo = "./dados_10.csv"
+        nome_arquivo = "./teste_6.csv"
 
         with open(nome_arquivo, 'a', newline='') as arquivo_csv:
             escritor_csv = csv.writer(arquivo_csv)

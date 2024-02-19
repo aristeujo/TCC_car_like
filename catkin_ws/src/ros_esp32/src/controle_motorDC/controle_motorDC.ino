@@ -24,18 +24,18 @@ void cmdVel_to_pwm( const my_project_msgs::Command_ackermann &cmd);
 #define ENC_IN_B 13 // Fio Amarelo
 #define potPin  34
 
- IPAddress server(192, 168, 0, 30); //IP do/ desktop da minha casa
+// IPAddress server(192, 168, 0, 30); ///IP do/ desktop da minha casa
 
 // IPAddress server(192, 168, 15, 6); //IP do/ desktop do Graest
 
 //IPAddress server(192,169,141,72); //IP do /notebook do STEM
 
-//IPAddress server(192,168,8,253); //IP do /notebook do STEM
+IPAddress server(192,168,8,253); //IP do /noteb/ook do STEM
 
 
 uint16_t serverPort = 11411;
-const char*  ssid = "Seixas_Net";
-const char*  password = "Mayum647";
+//const char*  ssid = "Seixas_Net";
+//const char*  password = "Mayum647";
 
 //const char*  ssid = "STEMLABNET";
 //const char*  password = "1n0v@t3ch.5t3m@#!";
@@ -43,8 +43,8 @@ const char*  password = "Mayum647";
 //const char*  ssid = "NucleoRobotica2g";
 //const char*  password = "!gra.3st#";
 
-//const char*  ssid = "Teste";
-//const char*  password = "12345678";
+const char*  ssid = "Teste";
+const char*  password = "12345678";
 
 
 ros::NodeHandle  nh;
@@ -71,11 +71,11 @@ int state = 0;
 //float Ki = 0.9067;
 
 //Funcionando com Hinf + sat
-float Kp = -1.7784;
-float Ki = 0.4779;
+//float Kp = -1.7784;
+//float Ki = 0.4779;
 
-//float Kp = -7.1921;
-//float Ki = 2.5403;
+//float Kp = -6.3955;
+//float Ki = 2.2608;
 
 TwoWire Wire_1 = TwoWire(1);
 
@@ -92,7 +92,6 @@ void setup() {
   pinMode(2, OUTPUT);
   setupWiFi();
 
-//  delay(2000);
   
   nh.getHardware()->setConnection(server, serverPort);
   nh.initNode();
@@ -124,14 +123,14 @@ void setup() {
 }
 
 void loop() {
-  // int r = map(analogRead(potPin), 0, 4095, 0, 280);
+//   int r = map(analogRead(potP/in), 0, 4095, 0, 300);
 
   // update MPU6050 communication
   mpu6050.update_mpu();
 
   // Loop every 100 ms
   if (millis() - timer >= intervalo) {
-//    long temp = millis();
+    long temp = millis();
     mpu6050.get_data();
 
     // Read sensor data
@@ -152,7 +151,7 @@ void loop() {
 //     u = Kp*rpm + Ki*x_i;
 //     x_i += r - rpm;
 
-     saturate(&u,0,230);  
+//     saturate(&u,0,230); / 
 
      // Publish in ROS topic
      msg.encoder_eixo = rpm;
@@ -162,7 +161,7 @@ void loop() {
      chatter.publish(&msg);
 
       // Debug info
-      Serial.printf("r:%d RPM:%.2f u:%.2f\n",r, rpm, u);
+//      Serial.printf("r:%d RPM:%.2f u:%.2f\n",r, rpm, u);/
 //    Serial.printf("RPM:%.2f  AS5600_L: %.2f  AS5600_R: %.2f  Z_angle: %.2f\n", rpm, enc_as5600_L, enc_as5600_R, mpu6050.angularVelocityZ);
 //     Serial.printf("r:%.2f  x_hat:%.2f y: %.2f\n", Controller.r(0), states(0), rpm);
      motor.motorSpeed(r, state); // Min = 150 || Max = 230
@@ -174,8 +173,6 @@ void loop() {
 
   nh.spinOnce();
   
-//  motor.motorSpeed(u, FORWARD); // Min = 150 || Max = 230
-//  motor.setAngle(130);
 }
 
  void ISR_contador(){
@@ -230,5 +227,4 @@ void setupWiFi(){
 
      angle = steering_angle;
 
-//     Serial.println(angle);
  }
