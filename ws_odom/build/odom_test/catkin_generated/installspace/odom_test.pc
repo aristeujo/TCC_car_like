@@ -1,8 +1,0 @@
-prefix=/home/aristeujo/TCC/ws_odom/install
-
-Name: odom_test
-Description: Description of odom_test
-Version: 0.0.0
-Cflags: 
-Libs: -L${prefix}/lib 
-Requires: 
