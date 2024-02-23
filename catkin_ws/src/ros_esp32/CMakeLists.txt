@@ -215,6 +215,6 @@ catkin_install_python(PROGRAMS
 # catkin_add_nosetests(test)
 
 
-add_executable(sensors_node src/sensors_node.cpp) #adiciona o caminho do no
-target_link_libraries(sensors_node ${catkin_LIBRARIES}) # associa as bibliotecas do Workspace
+add_executable(control_node src/control_node.cpp) #adiciona o caminho do no
+target_link_libraries(control_node ${catkin_LIBRARIES}) # associa as bibliotecas do Workspace
 # add_dependencies(counter_node $(catkin_EXPORTED_TARGETS my_project_generate_messages_cpp))

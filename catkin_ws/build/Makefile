@@ -48,10 +48,10 @@ RM = /usr/bin/cmake -E remove -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/aristeujo/TCC/catkin_ws/src
+CMAKE_SOURCE_DIR = /home/aristeujo/Documentos/TCC_codes/catkin_ws/src
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/aristeujo/TCC/catkin_ws/build
+CMAKE_BINARY_DIR = /home/aristeujo/Documentos/TCC_codes/catkin_ws/build
 
 #=============================================================================
 # Targets provided globally by CMake.
@@ -137,9 +137,9 @@ test/fast: test
 
 # The main all target
 all: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/aristeujo/TCC/catkin_ws/build/CMakeFiles /home/aristeujo/TCC/catkin_ws/build/CMakeFiles/progress.marks
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/aristeujo/Documentos/TCC_codes/catkin_ws/build/CMakeFiles /home/aristeujo/Documentos/TCC_codes/catkin_ws/build/CMakeFiles/progress.marks
 	$(MAKE) -f CMakeFiles/Makefile2 all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/aristeujo/TCC/catkin_ws/build/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/aristeujo/Documentos/TCC_codes/catkin_ws/build/CMakeFiles 0
 .PHONY : all
 
 # The main clean target
@@ -608,19 +608,6 @@ ackermann_msgs_generate_messages_cpp: cmake_check_build_system
 ackermann_msgs_generate_messages_cpp/fast:
 	$(MAKE) -f ackermann-drive-teleop/CMakeFiles/ackermann_msgs_generate_messages_cpp.dir/build.make ackermann-drive-teleop/CMakeFiles/ackermann_msgs_generate_messages_cpp.dir/build
 .PHONY : ackermann_msgs_generate_messages_cpp/fast
-
-#=============================================================================
-# Target rules for targets named sensors_node
-
-# Build rule for target.
-sensors_node: cmake_check_build_system
-	$(MAKE) -f CMakeFiles/Makefile2 sensors_node
-.PHONY : sensors_node
-
-# fast build rule for target.
-sensors_node/fast:
-	$(MAKE) -f ros_esp32/CMakeFiles/sensors_node.dir/build.make ros_esp32/CMakeFiles/sensors_node.dir/build
-.PHONY : sensors_node/fast
 
 #=============================================================================
 # Target rules for targets named tf2_msgs_generate_messages_nodejs
@@ -1156,6 +1143,19 @@ actionlib_msgs_generate_messages_lisp/fast:
 .PHONY : actionlib_msgs_generate_messages_lisp/fast
 
 #=============================================================================
+# Target rules for targets named control_node
+
+# Build rule for target.
+control_node: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 control_node
+.PHONY : control_node
+
+# fast build rule for target.
+control_node/fast:
+	$(MAKE) -f ros_esp32/CMakeFiles/control_node.dir/build.make ros_esp32/CMakeFiles/control_node.dir/build
+.PHONY : control_node/fast
+
+#=============================================================================
 # Target rules for targets named actionlib_generate_messages_cpp
 
 # Build rule for target.
@@ -1254,7 +1254,6 @@ help:
 	@echo "... ackermann_msgs_generate_messages_py"
 	@echo "... ackermann_msgs_generate_messages_eus"
 	@echo "... ackermann_msgs_generate_messages_cpp"
-	@echo "... sensors_node"
 	@echo "... tf2_msgs_generate_messages_nodejs"
 	@echo "... tf2_msgs_generate_messages_lisp"
 	@echo "... actionlib_generate_messages_nodejs"
@@ -1296,6 +1295,7 @@ help:
 	@echo "... actionlib_msgs_generate_messages_cpp"
 	@echo "... nav_msgs_generate_messages_eus"
 	@echo "... actionlib_msgs_generate_messages_lisp"
+	@echo "... control_node"
 	@echo "... actionlib_generate_messages_cpp"
 	@echo "... rosgraph_msgs_generate_messages_nodejs"
 	@echo "... actionlib_msgs_generate_messages_py"
