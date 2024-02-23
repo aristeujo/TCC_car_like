@@ -1,2 +1,2 @@
 # TCC_car_like
-Codigos do meu TCC
+Repositório para os códigos, modelos 3D e projeto de PCI do meu TCC.
