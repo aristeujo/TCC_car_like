@@ -1,0 +1,13 @@
+Output: NC Drill Files
+Type  : NC Drill
+From  : Project [pcb_car_like.PrjPcb]
+   Generated File[car_like_pcb.TXT]
+   Generated File[car_like_pcb-RectHoles.TXT]
+   Generated File[car_like_pcb.LDP]
+   Generated File[car_like_pcb.DRR]
+
+
+Files Generated   : 4
+Documents Printed : 0
+
+Finished Output Generation At 19:18:25 On 23/02/2024

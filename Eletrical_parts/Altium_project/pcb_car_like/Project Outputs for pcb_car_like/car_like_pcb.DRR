@@ -1,0 +1,21 @@
+----------------------------------------------------------------------------------------------------------------------------------
+NCDrill File Report For: car_like_pcb.PcbDoc   23/02/2024  19:18:25
+----------------------------------------------------------------------------------------------------------------------------------
+
+Layer Pair : Top Layer to Bottom Layer
+ASCII RoundHoles File : car_like_pcb.TXT
+ASCII RectHoles File : car_like_pcb-RectHoles.TXT
+
+Tool       Hole Size               Hole Tolerance               Hole Type       Hole Count   Plated         Tool Travel
+----------------------------------------------------------------------------------------------------------------------------------
+T1      28mil (0.701mm)                                           Rectangle         2         PTH        0.92inch (23.31mm)
+T2      39mil (1.001mm)                                           Round             54        PTH        15.95inch (405.10mm)
+T3      40mil (1.011mm)                                           Round             4         PTH        0.30inch (7.62mm)
+T4      40mil (1.021mm)                                           Round             22        PTH        3.70inch (94.11mm)
+T5      51mil (1.3mm)                                             Round             1         PTH        0.00inch (0.00mm)
+T6      59mil (1.501mm)                                           Round             1         PTH        0.00inch (0.00mm)
+T7      118mil (3mm)                                              Round             4         PTH        8.71inch (221.12mm)
+----------------------------------------------------------------------------------------------------------------------------------
+Totals                                                                              88
+
+Total Processing Time (hh:mm:ss) : 00:00:00

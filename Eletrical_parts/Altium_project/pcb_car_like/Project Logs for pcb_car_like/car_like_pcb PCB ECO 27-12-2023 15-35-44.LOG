@@ -1,0 +1,125 @@
+Added Component: Designator=P1(HDR1X4_F)
+Add component (AddParameter): Name = "LatestRevisionDate"; Value = "17-Jul-2002"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "LatestRevisionNote"; Value = "Re-released for DXP Platform."; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Publisher"; Value = "Altium Limited"; VariantName = "[No Variations]"
+Added Component: Designator=P2(HDR1X2_M - KK)
+Add component (AddParameter): Name = "LatestRevisionDate"; Value = "17-Jul-2002"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "LatestRevisionNote"; Value = "Re-released for DXP Platform."; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Publisher"; Value = "Altium Limited"; VariantName = "[No Variations]"
+Added Component: Designator=P3(HDR1X3_M - KK)
+Add component (AddParameter): Name = "LatestRevisionDate"; Value = "17-Jul-2002"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "LatestRevisionNote"; Value = "Re-released for DXP Platform."; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Publisher"; Value = "Altium Limited"; VariantName = "[No Variations]"
+Added Component: Designator=P4(HDR1X2_M - KK)
+Add component (AddParameter): Name = "LatestRevisionDate"; Value = "17-Jul-2002"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "LatestRevisionNote"; Value = "Re-released for DXP Platform."; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Publisher"; Value = "Altium Limited"; VariantName = "[No Variations]"
+Added Component: Designator=P5(HDR1X3_F)
+Add component (AddParameter): Name = "LatestRevisionDate"; Value = "17-Jul-2002"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "LatestRevisionNote"; Value = "Re-released for DXP Platform."; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Publisher"; Value = "Altium Limited"; VariantName = "[No Variations]"
+Added Component: Designator=P6(HDR1X2_M - KK)
+Add component (AddParameter): Name = "LatestRevisionDate"; Value = "17-Jul-2002"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "LatestRevisionNote"; Value = "Re-released for DXP Platform."; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Publisher"; Value = "Altium Limited"; VariantName = "[No Variations]"
+Added Component: Designator=P7(HDR1X3_F)
+Add component (AddParameter): Name = "LatestRevisionDate"; Value = "17-Jul-2002"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "LatestRevisionNote"; Value = "Re-released for DXP Platform."; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Publisher"; Value = "Altium Limited"; VariantName = "[No Variations]"
+Added Component: Designator=P8(HDR1X2_M - KK)
+Add component (AddParameter): Name = "LatestRevisionDate"; Value = "17-Jul-2002"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "LatestRevisionNote"; Value = "Re-released for DXP Platform."; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Publisher"; Value = "Altium Limited"; VariantName = "[No Variations]"
+Added Component: Designator=P9(HDR1X3_M - KK)
+Add component (AddParameter): Name = "LatestRevisionDate"; Value = "17-Jul-2002"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "LatestRevisionNote"; Value = "Re-released for DXP Platform."; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Publisher"; Value = "Altium Limited"; VariantName = "[No Variations]"
+Added Component: Designator=P10(HDR1X2_M - KK)
+Add component (AddParameter): Name = "LatestRevisionDate"; Value = "17-Jul-2002"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "LatestRevisionNote"; Value = "Re-released for DXP Platform."; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Publisher"; Value = "Altium Limited"; VariantName = "[No Variations]"
+Added Component: Designator=P11(HDR1X3_M - KK)
+Add component (AddParameter): Name = "LatestRevisionDate"; Value = "17-Jul-2002"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "LatestRevisionNote"; Value = "Re-released for DXP Platform."; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Publisher"; Value = "Altium Limited"; VariantName = "[No Variations]"
+Added Component: Designator=SW1(SW-2)
+Added Component: Designator=U1(ESP32S)
+Add component (AddParameter): Name = "Availability"; Value = "In Stock"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Check_prices"; Value = "https://www.snapeda.com/parts/ESP32-DEVKITC-32U/Espressif+Systems/view-part/?ref=eda"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "MF"; Value = "Espressif Systems"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "MP"; Value = "ESP32-DEVKITC-32U"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Package"; Value = "None"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Price"; Value = "None"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Purchase-URL"; Value = "https://pricing.snapeda.com/search/part/ESP32-DEVKITC-32U/?ref=eda"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "SnapEDA_Link"; Value = "https://www.snapeda.com/parts/ESP32-DEVKITC-32U/Espressif+Systems/view-part/?ref=snap"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Value"; Value = ""; VariantName = "[No Variations]"
+Added Component: Designator=U2(GY521)
+Added Pin To Net: NetName=3V3 Pin=P1-4
+Added Pin To Net: NetName=3V3 Pin=P5-2
+Added Pin To Net: NetName=3V3 Pin=U2-1
+Added Net: Name=3V3
+Added Pin To Net: NetName=5V Pin=P4-2
+Added Pin To Net: NetName=5V Pin=P7-2
+Added Pin To Net: NetName=5V Pin=P8-2
+Added Pin To Net: NetName=5V Pin=P10-2
+Added Net: Name=5V
+Added Pin To Net: NetName=7V4 Pin=P2-2
+Added Pin To Net: NetName=7V4 Pin=P5-3
+Added Pin To Net: NetName=7V4 Pin=P6-2
+Added Pin To Net: NetName=7V4 Pin=U1-15
+Added Net: Name=7V4
+Added Pin To Net: NetName=enablePin Pin=P3-3
+Added Pin To Net: NetName=enablePin Pin=U1-26
+Added Net: Name=enablePin
+Added Pin To Net: NetName=ENC_IN_A Pin=P1-3
+Added Pin To Net: NetName=ENC_IN_A Pin=U1-12
+Added Net: Name=ENC_IN_A
+Added Pin To Net: NetName=ENC_IN_B Pin=P1-2
+Added Pin To Net: NetName=ENC_IN_B Pin=U1-13
+Added Net: Name=ENC_IN_B
+Added Pin To Net: NetName=GND_BAT Pin=P1-1
+Added Pin To Net: NetName=GND_BAT Pin=P4-1
+Added Pin To Net: NetName=GND_BAT Pin=P5-1
+Added Pin To Net: NetName=GND_BAT Pin=P6-1
+Added Pin To Net: NetName=GND_BAT Pin=P7-1
+Added Pin To Net: NetName=GND_BAT Pin=P8-1
+Added Pin To Net: NetName=GND_BAT Pin=P10-1
+Added Pin To Net: NetName=GND_BAT Pin=SW1-2
+Added Pin To Net: NetName=GND_BAT Pin=U1-14
+Added Pin To Net: NetName=GND_BAT Pin=U1-29
+Added Pin To Net: NetName=GND_BAT Pin=U2-2
+Added Net: Name=GND_BAT
+Added Pin To Net: NetName=motorPin1 Pin=P3-1
+Added Pin To Net: NetName=motorPin1 Pin=U1-21
+Added Net: Name=motorPin1
+Added Pin To Net: NetName=motorPin2 Pin=P3-2
+Added Pin To Net: NetName=motorPin2 Pin=U1-22
+Added Net: Name=motorPin2
+Added Pin To Net: NetName=phase_D_A Pin=P9-1
+Added Pin To Net: NetName=phase_D_A Pin=U1-11
+Added Net: Name=phase_D_A
+Added Pin To Net: NetName=phase_D_B Pin=P9-2
+Added Pin To Net: NetName=phase_D_B Pin=U1-10
+Added Net: Name=phase_D_B
+Added Pin To Net: NetName=phase_D_Z Pin=P9-3
+Added Pin To Net: NetName=phase_D_Z Pin=U1-9
+Added Net: Name=phase_D_Z
+Added Pin To Net: NetName=phase_E_A Pin=P11-1
+Added Pin To Net: NetName=phase_E_A Pin=U1-8
+Added Net: Name=phase_E_A
+Added Pin To Net: NetName=phase_E_B Pin=P11-2
+Added Pin To Net: NetName=phase_E_B Pin=U1-7
+Added Net: Name=phase_E_B
+Added Pin To Net: NetName=phase_E_Z Pin=P11-3
+Added Pin To Net: NetName=phase_E_Z Pin=U1-6
+Added Net: Name=phase_E_Z
+Added Pin To Net: NetName=SCL Pin=U1-17
+Added Pin To Net: NetName=SCL Pin=U2-3
+Added Net: Name=SCL
+Added Pin To Net: NetName=SDA Pin=U1-20
+Added Pin To Net: NetName=SDA Pin=U2-4
+Added Net: Name=SDA
+Added Pin To Net: NetName=servoPin Pin=P7-3
+Added Pin To Net: NetName=servoPin Pin=U1-16
+Added Net: Name=servoPin
+Added Class: Name=esquema_car_like_pcb

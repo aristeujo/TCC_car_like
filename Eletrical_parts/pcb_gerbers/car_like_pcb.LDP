@@ -1,0 +1,3 @@
+Layer Pairs Export File for PCB: D:\OneDrive - uea.edu.br\Documentos\TCC1\pcb_car_like\car_like_pcb.PcbDoc
+LayersSetName=Top_Bot_Thru_Holes|DrillFile=car_like_pcb.txt|DrillLayers=gtl,gbl
+LayersSetName=Top_Bot_Rect_Holes|DrillFile=car_like_pcb-rectholes.txt|DrillLayers=gtl,gbl

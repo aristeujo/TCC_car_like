@@ -1,0 +1,7 @@
+Removed Pin From Net: NetName=GND_BAT Pin=P13-1
+Removed Pin From Net: NetName=7V4 Pin=U3-1
+Removed Pin From Net: NetName=GND_BAT Pin=U3-2
+Added Pin To Net: NetName=GND_BAT Pin=U3-1
+Added Pin To Net: NetName=7V4 Pin=U3-2
+Added Pin To Net: NetName=GND Pin=P13-1
+Added Net: Name=GND

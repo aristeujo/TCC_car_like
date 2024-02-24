@@ -1,0 +1,4 @@
+Change Component Footprint: Designator=P2 Old Footprint=HDR1X2_M - KK New Footprint=BORNE_2VIAS
+Change Component Comment : Designator=P2 Old Comment=BAT_7V4 New Comment=borne_2vias
+Change Component Comment : Designator=P13 Old Comment=Header 2_male_kk New Comment=jumper_reg2
+Change component parameters: Designator = "P2" ("P2"); Footprint = "HDR1X2_M - KK"; UniqueID = "\MZCQUQXN" ("\MZCQUQXN")
