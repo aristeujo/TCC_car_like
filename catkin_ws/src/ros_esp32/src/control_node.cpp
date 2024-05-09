@@ -43,7 +43,7 @@ private:
     double e = 0.0, psi = 0.0;
 
     // Actuators command values
-    double motor_setpoint = 0.0, angle_servo;
+    double motor_setpoint = 0.0, angle_servo = 0.0;
 
     // Ackermann message commands
     double linear_speed_ = 0.0, steering_angle_ = 0.0;
@@ -60,7 +60,7 @@ private:
 
     // Time Test
     double time;
-    int flag  = 1;
+    int flag  = 0;
 
     ros::Subscriber sub_sensors_;
     ros::Publisher odom_pub_;
@@ -90,7 +90,7 @@ CarLike_Control::CarLike_Control(ros::NodeHandle *nh)
 {       
     nh->getParam("wheelBase", wheelbase_);
     nh->getParam("wheelRadius", wheelRadius_);
-    nh->getParam("offset_angle_servo", angle_servo);
+    nh->getParam("offset_angle_servo", offset_angle_servo);
     if(nh->getParam("min_angle_servo", min_angle_servo)){
         min_angle_servo_radians = min_angle_servo*(M_PI/180);
     }
@@ -106,13 +106,14 @@ CarLike_Control::CarLike_Control(ros::NodeHandle *nh)
 
     nh->getParam("/control_node/x_initial", initial_x_);
     nh->getParam("/control_node/y_initial", initial_y_);
-    nh->getParam("/control_node/yaw_initial", initial_theta_);
+    nh->getParam("/control_node/theta_initial", initial_theta_);
     nh->getParam("/control_node/motor_setpoint", motor_setpoint);
     nh->getParam("/control_node/time", time);
 
     x_ = initial_x_;
     y_ = initial_y_;
     theta_ = initial_theta_;
+    // theta_ = 0.0;
 
     current_time_ = ros::Time::now();
     data_pub_ = nh->advertise<my_project_msgs::Data>("data_pub", 100);
@@ -168,6 +169,7 @@ void CarLike_Control::odometryCalc(){
     else{
         theta_ = theta_imu_;
     }
+
     theta_ += initial_theta_;
 
     // Maintain angle betwen [-3.14, 3.14]
@@ -305,6 +307,7 @@ void CarLike_Control::controller(double motor_setpoint){
 
 void CarLike_Control::sendAckerCommands(double linear_speed, double steering_angle){
     my_project_msgs::Command_ackermann msg_cmd;
+
     msg_cmd.rpm = linear_speed;
     msg_cmd.servo_angle = steering_angle;
 
@@ -349,7 +352,7 @@ void CarLike_Control::ackermannCallback(const ackermann_msgs::AckermannDriveStam
 
     sendAckerCommands(rpm_, angle_servo);
 
-    // ROS_INFO("rpm:%.2f angle_servo:%.2f", rpm_, angle_servo);
+    ROS_INFO("rpm:%.2f angle_servo:%.2f", rpm_, angle_servo);
 }
 
 void CarLike_Control::initCallback(const std_msgs::String &msg){

@@ -4,7 +4,7 @@ set(CMAKE_DEPENDS_LANGUAGES
   )
 # The set of files for implicit dependencies of each language:
 set(CMAKE_DEPENDS_CHECK_CXX
-  "/home/aristeujo/Documentos/TCC_codes/catkin_ws/src/ros_esp32/src/control_node.cpp" "/home/aristeujo/Documentos/TCC_codes/catkin_ws/build/ros_esp32/CMakeFiles/control_node.dir/src/control_node.cpp.o"
+  "/home/aristeujo/tcc_codes/catkin_ws/src/ros_esp32/src/control_node.cpp" "/home/aristeujo/tcc_codes/catkin_ws/build/ros_esp32/CMakeFiles/control_node.dir/src/control_node.cpp.o"
   )
 set(CMAKE_CXX_COMPILER_ID "GNU")
 
@@ -17,7 +17,7 @@ set(CMAKE_TARGET_DEFINITIONS_CXX
 
 # The include file search paths:
 set(CMAKE_CXX_TARGET_INCLUDE_PATH
-  "/home/aristeujo/Documentos/TCC_codes/catkin_ws/devel/include"
+  "/home/aristeujo/tcc_codes/catkin_ws/devel/include"
   "/opt/ros/noetic/include"
   "/opt/ros/noetic/share/xmlrpcpp/cmake/../../../include/xmlrpcpp"
   )

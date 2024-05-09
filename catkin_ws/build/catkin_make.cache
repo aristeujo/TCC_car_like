@@ -1,2 +1,2 @@
-ackermann-drive-teleop:my_project_msgs:ros_esp32
--DCATKIN_DEVEL_PREFIX=/home/aristeujo/Documentos/TCC_codes/catkin_ws/devel -DCMAKE_INSTALL_PREFIX=/home/aristeujo/Documentos/TCC_codes/catkin_ws/install -G Unix Makefiles
+my_project_msgs:ros_esp32
+-DCATKIN_DEVEL_PREFIX=/home/aristeujo/tcc_codes/catkin_ws/devel -DCMAKE_INSTALL_PREFIX=/home/aristeujo/tcc_codes/catkin_ws/install -G Unix Makefiles
