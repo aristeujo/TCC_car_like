@@ -1,9 +1,5 @@
 #define ROSSERIAL_ARDUINO_TCP
 #include "WiFi.h"
-#include "kalmanFilter.h"
-#include "stateSpaceMatrices.h"
-#include "controller.h"
-#include "kalmanFilter.h"
 #include "motor.h"
 #include "encoder.h"
 #include "AS5600.h"
@@ -12,219 +8,148 @@
 #include <my_project_msgs/Sensors.h>
 #include <my_project_msgs/Command_ackermann.h>
 
+SemaphoreHandle_t i2cMutex;
+
 void ISR_contador();
 void setupWiFi();
-void cmdVel_to_pwm( const my_project_msgs::Command_ackermann &cmd);
+void cmdVel_to_pwm(const my_project_msgs::Command_ackermann &cmd);
 
 #define FORWARD 0
 #define BACKWARD 1
 #define STOP 2
 
-#define ENC_IN_A 12 // Fio verde
-#define ENC_IN_B 13 // Fio Amarelo
+#define ENC_IN_A 12
+#define ENC_IN_B 13
 #define potPin  34
 
-IPAddress server(192, 168, 0, 32); ///IP do/ desktop da minha casa
-
-// IPAddress server(192, 168, 15, 6); //IP do/ desktop do Graest
-
-//IPAddress server(192,169,141,72); //IP do /notebook do STEM
-
-// IPAddress server(192,168,8,253); //IP do /noteb/ook do STEM
-
-
+IPAddress server(192, 168, 0, 32);
 uint16_t serverPort = 11411;
-const char*  ssid = "Seixas_Net";
-const char*  password = "Mayum647";
 
-//const char*  ssid = "STEMLABNET";
-//const char*  password = "1n0v@t3ch.5t3m@#!";
+const char* ssid = "Seixas_Net";
+const char* password = "Mayum647";
 
-//const char*  ssid = "NucleoRobotica2g";
-//const char*  password = "!gra.3st#";
-
-// const char*  ssid = "Teste";
-// const char*  password = "12345678";
-
-
-ros::NodeHandle  nh;
+ros::NodeHandle nh;
 my_project_msgs::Sensors msg;
 ros::Publisher chatter("/sensors_values", &msg);
 ros::Subscriber<my_project_msgs::Command_ackermann> sub("/cmd_car", &cmdVel_to_pwm);
 
-Motor motor(18,19,4,27);
-Encoder encoder;
-
-int r = 0;
-int pwm = 0;
-float u = 0;
-float angle = 92;
-float x_i = 0;
-int state = 0;
-
-//hinf
-//float Kp = -3.297;
-//float Ki = 1.325;
-
-// sat
-//float Kp = -2.8053;
-//float Ki = 0.9067;
-
-//Funcionando com Hinf + sat
-//float Kp = -1.7784;
-//float Ki = 0.4779;
-
-//float Kp = -6.3955;
-//float Ki = 2.2608;
-
 TwoWire Wire_1 = TwoWire(1);
-
+Motor motor(18, 19, 4, 27);
 AS5600 as5600_0(&Wire);
 AS5600 as5600_1(&Wire_1);
+Giroscopio mpu6050(Wire, i2cMutex);
+Encoder encoder(i2cMutex);
 
-Giroscopio mpu6050;
+int r = 0;
+float angle = 92;
+int state = STOP;
 
-unsigned long timer = 0;
-unsigned long intervalo = 100;
+void TaskSensorRead(void *pvParameters);
+void TaskPublishROS(void *pvParameters);
+void TaskMotorControl(void *pvParameters);
 
 void setup() {
   Serial.begin(115200);
   pinMode(2, OUTPUT);
   setupWiFi();
 
-  
   nh.getHardware()->setConnection(server, serverPort);
   nh.initNode();
   nh.advertise(chatter);
   nh.subscribe(sub);
-  
-  motor.initMotor();
 
-  pinMode(potPin, INPUT);  
-  pinMode(ENC_IN_A , INPUT_PULLUP);
-  pinMode(ENC_IN_B , INPUT);
-  
+  i2cMutex = xSemaphoreCreateMutex();
+
+  motor.initMotor();
+  pinMode(potPin, INPUT);
+  pinMode(ENC_IN_A, INPUT_PULLUP);
+  pinMode(ENC_IN_B, INPUT);
   attachInterrupt(digitalPinToInterrupt(ENC_IN_A), ISR_contador, RISING);
-  Wire.begin(21,22);
-  as5600_0.begin(5);
-  as5600_0.setDirection(AS5600_CLOCK_WISE);
-  int a = as5600_0.isConnected();
-  Serial.print("Connect: ");
-  Serial.println(a);
-  encoder.setEncoder_AS5600(as5600_1, 32,33,25, Wire_1); 
 
   mpu6050.setup_giro();
-  
+  encoder.setEncoder_AS5600(as5600_0, 21, 22, 23, Wire);
+  encoder.setEncoder_AS5600(as5600_1, 32, 33, 25, Wire_1);
+
+  xTaskCreate(TaskSensorRead, "TaskSensorRead", 2048, NULL, 2, NULL);
+  xTaskCreate(TaskPublishROS, "TaskPublishROS", 2048, NULL, 1, NULL);
+  xTaskCreate(TaskMotorControl, "TaskMotorControl", 2048, NULL, 3, NULL);
+
   motor.motorSpeed(0, STOP);
   motor.setAngle(motor.angulo_frente);
   Serial.println("End of Setup");
-
-  delay(1000);
 }
 
 void loop() {
-//   int r = map(analogRead(potP/in), 0, 4095, 0, 300);
+  nh.spinOnce();
+  vTaskDelay(1);
+}
 
-  // update MPU6050 communication
-  mpu6050.update_mpu();
-
-  // Loop every 100 ms
-  if (millis() - timer >= intervalo) {
-    long temp = millis();
+void TaskSensorRead(void *pvParameters) {
+  while (1) {
+    mpu6050.update_mpu();
     mpu6050.get_data();
+    encoder.getRPM_AS5600(as5600_0);
+    encoder.getRPM_AS5600(as5600_1);
+    encoder.getRPM_MotorEixo(100);
+    vTaskDelay(pdMS_TO_TICKS(50));
+  }
+}
 
-    // Read sensor data
+void TaskPublishROS(void *pvParameters) {
+  while (1) {
+    float rpm = encoder.getRPM_MotorEixo(100);
+    float angularVelocity = mpu6050.angularVelocityZ;
     float enc_as5600_L = encoder.getRPM_AS5600(as5600_0);
     float enc_as5600_R = encoder.getRPM_AS5600(as5600_1);
-    float rpm = encoder.getRPM_MotorEixo(intervalo);
-    float angularVelocity = mpu6050.angularVelocityZ; 
 
-    // offset stop state
-    if(abs(enc_as5600_L) < 2.0){
-      enc_as5600_L = 0.0;
-    }
-    else if(abs(enc_as5600_R) < 2.0){
-      enc_as5600_R = 0.0;
-    }
+    msg.encoder_eixo = rpm;
+    msg.encoder_as5600_L = enc_as5600_L;
+    msg.encoder_as5600_R = enc_as5600_R;
+    msg.angularVelocity = angularVelocity;
+    chatter.publish(&msg);
 
-     // Update control signal 
-//     u = Kp*rpm + Ki*x_i;
-//     x_i += r - rpm;
-
-//     saturate(&u,0,230); / 
-
-     // Publish in ROS topic
-     msg.encoder_eixo = rpm;
-     msg.encoder_as5600_L = enc_as5600_L;
-     msg.encoder_as5600_R = enc_as5600_R; 
-     msg.angularVelocity = angularVelocity;
-     chatter.publish(&msg);
-
-      // Debug info
-//      Serial.printf("r:%d RPM:%.2f u:%.2f\n",r, rpm, u);/
-//    Serial.printf("RPM:%.2f  AS5600_L: %.2f  AS5600_R: %.2f  Z_angle: %.2f\n", rpm, enc_as5600_L, enc_as5600_R, mpu6050.angularVelocityZ);
-//     Serial.printf("r:%.2f  x_hat:%.2f y: %.2f\n", Controller.r(0), states(0), rpm);
-     motor.motorSpeed(r, state); // Min = 150 || Max = 230
-     motor.setAngle(angle);
-     
-     timer = millis();
-//     Serial.println(timer - temp);
+    vTaskDelay(pdMS_TO_TICKS(100));
   }
-
-  nh.spinOnce();
-  
 }
 
- void ISR_contador(){
-   int val = digitalRead(ENC_IN_B);
-
-
-  if (val == LOW) {
-    encoder.direcao = true; // Trás
+void TaskMotorControl(void *pvParameters) {
+  while (1) {
+    motor.motorSpeed(r, state);
+    motor.setAngle(angle);
+    vTaskDelay(pdMS_TO_TICKS(10));
   }
-  else {
-    encoder.direcao = false; // Frente
-  }
-
-   if (encoder.direcao) {
-     encoder.pulsos_roda++;
-   }
-   else {
-     encoder.pulsos_roda--;
-   }
- };
-
-void setupWiFi(){  
-   WiFi.begin(ssid, password);
-   while (WiFi.status() != WL_CONNECTED) { delay(500);Serial.print("."); }
-   Serial.print("SSID: ");
-   Serial.println(WiFi.SSID());
-   Serial.print("IP:   ");
-   Serial.println(WiFi.localIP());
-   digitalWrite(2, HIGH);
-
 }
 
- void cmdVel_to_pwm(const my_project_msgs::Command_ackermann &cmd){
+void ISR_contador() {
+  int val = digitalRead(ENC_IN_B);
+  encoder.direcao = (val == LOW) ? true : false;
+  encoder.pulsos_roda += (encoder.direcao) ? 1 : -1;
+}
 
-     float motor_speed = cmd.rpm;
-     float steering_angle = cmd.servo_angle;
+void setupWiFi() {
+  WiFi.begin(ssid, password);
+  while (WiFi.status() != WL_CONNECTED) {
+    delay(500);
+    Serial.print(".");
+  }
+  Serial.println("\nWiFi conectado");
+  Serial.print("IP: ");
+  Serial.println(WiFi.localIP());
+  digitalWrite(2, HIGH);
+}
 
-     if(motor_speed > 5){
-      state = FORWARD;
-     }
+void cmdVel_to_pwm(const my_project_msgs::Command_ackermann &cmd) {
+  float motor_speed = cmd.rpm;
+  float steering_angle = cmd.servo_angle;
 
-     else if(motor_speed < -5){
-      state = BACKWARD;
-     }
+  if (motor_speed > 5) {
+    state = FORWARD;
+  } else if (motor_speed < -5) {
+    state = BACKWARD;
+  } else {
+    state = STOP;
+  }
 
-     else if(motor_speed == 0){
-      state = STOP;
-     }
-
-     // RPM setpoint
-     r = floor(abs(motor_speed)); 
-
-     angle = steering_angle;
-
- }
+  r = floor(abs(motor_speed));
+  angle = steering_angle;
+}

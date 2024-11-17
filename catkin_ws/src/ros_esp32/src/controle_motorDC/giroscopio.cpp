@@ -1,84 +1,65 @@
 #include "giroscopio.h"
 
-MPU6050 mpu(Wire);
+Giroscopio::Giroscopio(TwoWire &wire, SemaphoreHandle_t &mutex) : mpu(wire), i2cMutex(mutex) {}
 
-Giroscopio::Giroscopio(){}
+Giroscopio::~Giroscopio() {}
 
-Giroscopio::~Giroscopio(){}
-
-void Giroscopio::setup_giro(){
-  // Wire.begin();
-  
-  byte status = mpu.begin();
-  Serial.print(F("MPU6050 status: "));
-  Serial.println(status);
-  while(status!=0){ } // stop everything if could not connect to MPU6050
-  
-  Serial.println(F("Calculating offsets, do not move MPU6050"));
-  delay(1000);
-
-  mpu.calcOffsets(); // gyro and accelero
-  Serial.println("Done!\n");
-};
-
-void Giroscopio::update_mpu(){
-  mpu.update();
-};
-
-void Giroscopio::get_data(){
-//   this->accX = gToMpss(mpu.getAccX());
-  this->angularVelocityZ = radians(mpu.getGyroZ());
-//   this->angleZ = mpu.getAngleZ();
+void Giroscopio::setup_giro() {
+    byte status = mpu.begin();
+    if (status != 0) {
+        Serial.print(F("MPU6050 status: "));
+        Serial.println(status);
+        while (status != 0) {}
+    }
+    Serial.println(F("Calculating offsets, do not move MPU6050"));
+    delay(1000);
+    mpu.calcOffsets();
+    Serial.println("Done!");
 }
 
-void Giroscopio::debug_data(){
-    Serial.print(t/1000);
-    Serial.print(",");
-    Serial.print(accX);
-    Serial.print(",");
-    Serial.print(angularVelocityZ);
-    Serial.print(",");
-    Serial.println(velocidade_X);
-
-};
-
-float Giroscopio::estima_velocidade_X(float aceleracao){
-
-    if(i_X == 1) {
-      integral_aproximada_X = integral_aproximada_X + aceleracao; 
-      i_X = 2;
-    } 
-    if(i_X == 2){
-      integral_aproximada_X = integral_aproximada_X + 4 * aceleracao;
-      i_X = 3;
+void Giroscopio::update_mpu() {
+    if (xSemaphoreTake(i2cMutex, portMAX_DELAY)) {
+        mpu.update();
+        xSemaphoreGive(i2cMutex);
     }
-        
-    else { 
-      integral_aproximada_X = integral_aproximada_X + 2 * aceleracao;
-      i_X = 2;
-  }
+}
 
-  // Condição para considerar  que o carro está parado
-  if(abs(aceleracao) < offsetParado){
-    flag_X += 1;
-    if(flag_X == 4){
-      integral_aproximada_X = 0;
-      i_X = 1;
-      flag_X = 0;
+void Giroscopio::get_data() {
+    if (xSemaphoreTake(i2cMutex, portMAX_DELAY)) {
+        accX = gToMpss(mpu.getAccX());
+        angularVelocityZ = radians(mpu.getGyroZ());
+        angleZ = mpu.getAngleZ();
+        xSemaphoreGive(i2cMutex);
     }
-  }
+}
 
-  else{
-    flag_X = 0;
-  }
+float Giroscopio::estima_velocidade_X(float aceleracao) {
+    if (i_X == 1) {
+        integral_aproximada_X += aceleracao;
+        i_X = 2;
+    } else if (i_X == 2) {
+        integral_aproximada_X += 4 * aceleracao;
+        i_X = 3;
+    } else {
+        integral_aproximada_X += 2 * aceleracao;
+        i_X = 2;
+    }
 
-  float h = taxaDeAmostragem/1000;
-  float velocidade_estimada_X = (h / 3) * integral_aproximada_X;
+    if (abs(aceleracao) < offsetParado) {
+        flag_X++;
+        if (flag_X == 4) {
+            integral_aproximada_X = 0;
+            i_X = 1;
+            flag_X = 0;
+        }
+    } else {
+        flag_X = 0;
+    }
 
-return velocidade_estimada_X;
-};
+    float h = taxaDeAmostragem / 1000;
+    return (h / 3) * integral_aproximada_X;
+}
 
-
-float Giroscopio::gToMpss(float acc){
-  return 9.80665*acc;
-};
+float Giroscopio::gToMpss(float acc) {
+    return 9.80665 * acc;
+}
