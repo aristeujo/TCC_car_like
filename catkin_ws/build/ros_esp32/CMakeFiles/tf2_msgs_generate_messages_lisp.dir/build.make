@@ -43,10 +43,10 @@ RM = /usr/bin/cmake -E remove -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/aristeujo/tcc_codes/catkin_ws/src
+CMAKE_SOURCE_DIR = /home/aristeujo/real_time_codes/catkin_ws/src
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/aristeujo/tcc_codes/catkin_ws/build
+CMAKE_BINARY_DIR = /home/aristeujo/real_time_codes/catkin_ws/build
 
 # Utility rule file for tf2_msgs_generate_messages_lisp.
 
@@ -63,10 +63,10 @@ ros_esp32/CMakeFiles/tf2_msgs_generate_messages_lisp.dir/build: tf2_msgs_generat
 .PHONY : ros_esp32/CMakeFiles/tf2_msgs_generate_messages_lisp.dir/build
 
 ros_esp32/CMakeFiles/tf2_msgs_generate_messages_lisp.dir/clean:
-	cd /home/aristeujo/tcc_codes/catkin_ws/build/ros_esp32 && $(CMAKE_COMMAND) -P CMakeFiles/tf2_msgs_generate_messages_lisp.dir/cmake_clean.cmake
+	cd /home/aristeujo/real_time_codes/catkin_ws/build/ros_esp32 && $(CMAKE_COMMAND) -P CMakeFiles/tf2_msgs_generate_messages_lisp.dir/cmake_clean.cmake
 .PHONY : ros_esp32/CMakeFiles/tf2_msgs_generate_messages_lisp.dir/clean
 
 ros_esp32/CMakeFiles/tf2_msgs_generate_messages_lisp.dir/depend:
-	cd /home/aristeujo/tcc_codes/catkin_ws/build && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/aristeujo/tcc_codes/catkin_ws/src /home/aristeujo/tcc_codes/catkin_ws/src/ros_esp32 /home/aristeujo/tcc_codes/catkin_ws/build /home/aristeujo/tcc_codes/catkin_ws/build/ros_esp32 /home/aristeujo/tcc_codes/catkin_ws/build/ros_esp32/CMakeFiles/tf2_msgs_generate_messages_lisp.dir/DependInfo.cmake --color=$(COLOR)
+	cd /home/aristeujo/real_time_codes/catkin_ws/build && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/aristeujo/real_time_codes/catkin_ws/src /home/aristeujo/real_time_codes/catkin_ws/src/ros_esp32 /home/aristeujo/real_time_codes/catkin_ws/build /home/aristeujo/real_time_codes/catkin_ws/build/ros_esp32 /home/aristeujo/real_time_codes/catkin_ws/build/ros_esp32/CMakeFiles/tf2_msgs_generate_messages_lisp.dir/DependInfo.cmake --color=$(COLOR)
 .PHONY : ros_esp32/CMakeFiles/tf2_msgs_generate_messages_lisp.dir/depend
 

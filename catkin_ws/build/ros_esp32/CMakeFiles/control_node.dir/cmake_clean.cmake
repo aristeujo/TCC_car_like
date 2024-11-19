@@ -1,6 +1,6 @@
 file(REMOVE_RECURSE
-  "/home/aristeujo/tcc_codes/catkin_ws/devel/lib/ros_esp32/control_node"
-  "/home/aristeujo/tcc_codes/catkin_ws/devel/lib/ros_esp32/control_node.pdb"
+  "/home/aristeujo/real_time_codes/catkin_ws/devel/lib/ros_esp32/control_node"
+  "/home/aristeujo/real_time_codes/catkin_ws/devel/lib/ros_esp32/control_node.pdb"
   "CMakeFiles/control_node.dir/src/control_node.cpp.o"
 )
 
