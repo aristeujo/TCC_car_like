@@ -3,7 +3,7 @@ wheelBase: 0.248
 wheelRadius: 0.0335
 
 # Parameters actuators
-offset_angle_servo: 92
+offset_angle_servo: 98
 min_angle_servo: -27
 max_angle_servo: 27
 max_speed: 0.45
@@ -14,7 +14,6 @@ max_speed: 0.45
 # k_1: -226.2121
 # K_2: -15.0031
 
-# funcional
 K_1: -14.0055   
 K_2: -6.2
 
