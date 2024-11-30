@@ -7,5 +7,9 @@
    "DATA"
    "<SENSORS>"
    "SENSORS"
+   "<TASKSTATE>"
+   "TASKSTATE"
+   "<TASKSGANTT>"
+   "TASKSGANTT"
   ))
 

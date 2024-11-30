@@ -42,6 +42,8 @@ if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_
     "/home/aristeujo/real_time_codes/catkin_ws/src/my_project_msgs/msg/Sensors.msg"
     "/home/aristeujo/real_time_codes/catkin_ws/src/my_project_msgs/msg/Command_ackermann.msg"
     "/home/aristeujo/real_time_codes/catkin_ws/src/my_project_msgs/msg/Data.msg"
+    "/home/aristeujo/real_time_codes/catkin_ws/src/my_project_msgs/msg/TaskState.msg"
+    "/home/aristeujo/real_time_codes/catkin_ws/src/my_project_msgs/msg/TasksGantt.msg"
     )
 endif()
 

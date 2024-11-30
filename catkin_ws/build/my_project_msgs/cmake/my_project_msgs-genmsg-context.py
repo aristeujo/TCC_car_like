@@ -1,6 +1,6 @@
 # generated from genmsg/cmake/pkg-genmsg.context.in
 
-messages_str = "/home/aristeujo/real_time_codes/catkin_ws/src/my_project_msgs/msg/Sensors.msg;/home/aristeujo/real_time_codes/catkin_ws/src/my_project_msgs/msg/Command_ackermann.msg;/home/aristeujo/real_time_codes/catkin_ws/src/my_project_msgs/msg/Data.msg"
+messages_str = "/home/aristeujo/real_time_codes/catkin_ws/src/my_project_msgs/msg/Sensors.msg;/home/aristeujo/real_time_codes/catkin_ws/src/my_project_msgs/msg/Command_ackermann.msg;/home/aristeujo/real_time_codes/catkin_ws/src/my_project_msgs/msg/Data.msg;/home/aristeujo/real_time_codes/catkin_ws/src/my_project_msgs/msg/TaskState.msg;/home/aristeujo/real_time_codes/catkin_ws/src/my_project_msgs/msg/TasksGantt.msg"
 services_str = ""
 pkg_name = "my_project_msgs"
 dependencies_str = "std_msgs"

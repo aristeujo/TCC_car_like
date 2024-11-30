@@ -170,6 +170,7 @@ include_directories(
 
 catkin_install_python(PROGRAMS
   scripts/data_sub.py
+  scripts/tasks_gantt.py
   DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
 )
 

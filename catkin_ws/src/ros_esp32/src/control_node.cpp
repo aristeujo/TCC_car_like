@@ -5,6 +5,7 @@
 #include "my_project_msgs/Sensors.h"
 #include "my_project_msgs/Command_ackermann.h"
 #include "my_project_msgs/Data.h"
+#include "my_project_msgs/TasksSchedule.h"
 #include <nav_msgs/Odometry.h>
 #include <math.h>
 

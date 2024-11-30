@@ -6,5 +6,3 @@
 # testing this directory and lists subdirectories to be tested as well.
 subdirs("gtest")
 subdirs("my_project_msgs")
-subdirs("ackermann-drive-teleop")
-subdirs("ros_esp32")

@@ -10,4 +10,8 @@
     (:file "_package_Data" :depends-on ("_package"))
     (:file "Sensors" :depends-on ("_package_Sensors"))
     (:file "_package_Sensors" :depends-on ("_package"))
+    (:file "TaskState" :depends-on ("_package_TaskState"))
+    (:file "_package_TaskState" :depends-on ("_package"))
+    (:file "TasksGantt" :depends-on ("_package_TasksGantt"))
+    (:file "_package_TasksGantt" :depends-on ("_package"))
   ))

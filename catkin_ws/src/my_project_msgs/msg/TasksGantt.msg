@@ -1,0 +1,5 @@
+my_project_msgs/TaskState[] task_states
+float32 wcet_sensor_read
+float32 wcet_publish_ros
+float32 wcet_motor_control
+float32 wcet_send_gantt

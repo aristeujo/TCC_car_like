@@ -17,6 +17,8 @@ add_message_files(
   Sensors.msg
   Command_ackermann.msg
   Data.msg
+  TaskState.msg
+  TasksGantt.msg
 )
 
 generate_messages(

@@ -132,8 +132,6 @@ if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for each subdirectory.
   include("/home/aristeujo/real_time_codes/catkin_ws/build/gtest/cmake_install.cmake")
   include("/home/aristeujo/real_time_codes/catkin_ws/build/my_project_msgs/cmake_install.cmake")
-  include("/home/aristeujo/real_time_codes/catkin_ws/build/ackermann-drive-teleop/cmake_install.cmake")
-  include("/home/aristeujo/real_time_codes/catkin_ws/build/ros_esp32/cmake_install.cmake")
 
 endif()
 

@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 import rospy
 import csv
-from my_project_msgs.msg import Sensors, Command_ackermann, Data
+from my_project_msgs.msg import Sensors, Command_ackermann, Data, TasksSchedule
 from nav_msgs.msg import Odometry
 
 class listener:
@@ -34,11 +34,19 @@ class listener:
         self.dist = 0.0 
         self.psi = 0.0
 
-        self.timer = rospy.Timer(rospy.Duration(0.1), self.timerCallback)
+        # Estados das tasks
+        self.sensor_task = ""
+        self.control_task = ""
+        self.publish_task = ""
+        self.idle = ""
+
+        self.timer_test = rospy.Timer(rospy.Duration(0.1), self.timerCallback_test)
+        self.timer_task = rospy.Timer(rospy.Duration(0.001), self.timerCallback_task)
         self.sensors_sub = rospy.Subscriber("/sensors_values", Sensors, self.callback_sensors)
         self.odom_sub = rospy.Subscriber("/odom", Odometry, self.callback_odom)
         self.cmd_sub = rospy.Subscriber("/cmd_car", Command_ackermann, self.callback_cmd)
         self.data_sub = rospy.Subscriber("data_pub", Data, self.callback_data)
+        
 
     def callback_sensors(self, data):
         self.rpm_encoder_eixo = round(data.encoder_eixo,2)
@@ -76,7 +84,13 @@ class listener:
 
         # rospy.loginfo("yaw = %f  wz= %f", self.orientationZ, self.wZ)
 
-    def timerCallback(self, event):
+    def callback_tasks(self, data):
+        self.sensor_task = data.task_sensor
+        self.control_task = data.task_motor_control
+        self.publish_task = data.task_publish
+        self.idle = data.task_scheduler
+
+    def timerCallback_test(self, event):
         data = [self.rpm_encoder_eixo, self.rpm_L, self.rpm_R, self.x, self.y, self.orientationZ, self.vX, self.vY, self.wZ, 
                 self.setpoint_motor, self.angle_servo, self.u, self.yaw_odom, self.yaw_mpu, self.yaw_comb, self.dist, self.psi]
 
@@ -85,11 +99,24 @@ class listener:
         rospy.loginfo("rodando")
 
         # Nome do arquivo CSV
-        nome_arquivo = "./teste_6.csv"
+        nome_arquivo = "./teste.csv"
 
         with open(nome_arquivo, 'a', newline='') as arquivo_csv:
             escritor_csv = csv.writer(arquivo_csv)
             escritor_csv.writerow(data)
+
+    def timerCallback_tasks(self, event):
+        data = [self.sensor_task, self.control_task, self.publish_task, self.idle]
+
+        rospy.loginfo("rodando_task")
+
+        # Nome do arquivo CSV
+        nome_arquivo = "./tasks.csv"
+
+        with open(nome_arquivo, 'a', newline='') as arquivo_csv:
+            escritor_csv = csv.writer(arquivo_csv)
+            escritor_csv.writerow(data)
+
 
 
 

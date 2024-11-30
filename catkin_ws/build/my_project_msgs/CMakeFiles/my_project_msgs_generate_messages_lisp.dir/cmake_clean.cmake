@@ -2,6 +2,8 @@ file(REMOVE_RECURSE
   "/home/aristeujo/real_time_codes/catkin_ws/devel/share/common-lisp/ros/my_project_msgs/msg/Command_ackermann.lisp"
   "/home/aristeujo/real_time_codes/catkin_ws/devel/share/common-lisp/ros/my_project_msgs/msg/Data.lisp"
   "/home/aristeujo/real_time_codes/catkin_ws/devel/share/common-lisp/ros/my_project_msgs/msg/Sensors.lisp"
+  "/home/aristeujo/real_time_codes/catkin_ws/devel/share/common-lisp/ros/my_project_msgs/msg/TaskState.lisp"
+  "/home/aristeujo/real_time_codes/catkin_ws/devel/share/common-lisp/ros/my_project_msgs/msg/TasksGantt.lisp"
   "CMakeFiles/my_project_msgs_generate_messages_lisp"
 )
 
