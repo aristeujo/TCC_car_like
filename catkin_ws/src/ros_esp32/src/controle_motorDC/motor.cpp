@@ -19,6 +19,8 @@ void Motor::initMotor(){
   pinMode(this->motorPin2, OUTPUT);
   pinMode(this->enablePin, OUTPUT);
 
+//  ledcAttachChannel(this->enablePin, this->freq, this->resolution, this->pwmChannel); // Versao 3.0.x
+
   ledcSetup(this->pwmChannel, this->freq, this->resolution);
   ledcAttachPin(this->enablePin, this->pwmChannel);
 
@@ -32,6 +34,7 @@ void Motor::motorSpeed(int velocidade, int sentido) {
     case 0: //Forward
       digitalWrite(this->motorPin1, HIGH);
       digitalWrite(this->motorPin2, LOW);
+//      ledcWriteChannel(this->pwmChannel, velocidade); // versao 3.0.x
       ledcWrite(this->pwmChannel, velocidade);
       break;
 

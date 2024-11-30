@@ -25,14 +25,7 @@ void MPU6050Handler::update() {
     if (xSemaphoreTake(i2cMutex, portMAX_DELAY)) {
         mpu.update();
 
-        // Armazena os dados na estrutura
-        mpuData.accX = mpu.getAccX();
-        mpuData.accY = mpu.getAccY();
-        mpuData.accZ = mpu.getAccZ();
-        mpuData.gyroX = mpu.getGyroX();
-        mpuData.gyroY = mpu.getGyroY();
         mpuData.gyroZ = mpu.getGyroZ();
-        mpuData.temperature = mpu.getTemp();
         xSemaphoreGive(i2cMutex);
     }
 }

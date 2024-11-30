@@ -8,7 +8,7 @@ void Encoder::setEncoder_AS5600(AS5600 &obj, int SCL_pin, int SDA_pin, int direc
     if (xSemaphoreTake(i2cMutex, portMAX_DELAY)) {
         I2C_obj.begin(SCL_pin, SDA_pin);
         obj.begin(direction_pin);
-        obj.setDirection(AS5600_CLOCK_WISE);
+        obj.setDirection(AS5600_COUNTERCLOCK_WISE);
 
         int isConnected = obj.isConnected();
         Serial.print("AS5600 Connected: ");

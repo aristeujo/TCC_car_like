@@ -5,9 +5,7 @@
 #include <MPU6050_light.h>
 
 struct MPUData {
-    float accX, accY, accZ;
-    float gyroX, gyroY, gyroZ;
-    float temperature;
+    float gyroZ;
 };
 
 class MPU6050Handler {
